@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import './normalize.css';
 import App from './components/App';
-import { AppContextProvider } from './components/AppContext';
-
+import { appStore } from './state';
 ReactDOM.render(
 	<React.StrictMode>
-		<AppContextProvider>
+		<Provider store={appStore}>
 			<App />
-		</AppContextProvider>
+		</Provider>
 	</React.StrictMode>,
 	document.getElementById('root'),
 );
