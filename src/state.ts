@@ -1,4 +1,5 @@
 import { combineReducers, configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Purchases } from './types';
 
 const coinsSlice = createSlice({
 	name: 'coins',
@@ -9,21 +10,42 @@ const coinsSlice = createSlice({
 	},
 });
 
-const workersSlice = createSlice({
-	name: 'workers',
-	initialState: 0,
+interface IncrementorPayload {
+	amount: number;
+	type: Purchases;
+}
+type IncrementorState = { [key in Purchases]: number };
+const incrementorsSlice = createSlice({
+	name: 'incrementors',
+	initialState: {
+		[Purchases.worker]: 0,
+		[Purchases.noble]: 0,
+	} as IncrementorState,
 	reducers: {
-		incrementWorkers: (state, action: PayloadAction<number>) => state + action.payload,
-		decrementWorkers: (state, action: PayloadAction<number>) => state - action.payload,
+		addIncrementor: (state, action: PayloadAction<IncrementorPayload>) => {
+			return {
+				...state,
+				[action.payload.type]: state[action.payload.type] + action.payload.amount,
+			};
+		},
+		deleteIncrementor: (state, action: PayloadAction<IncrementorPayload>) => {
+			return {
+				...state,
+				[action.payload.type]: state[action.payload.type] - action.payload.amount,
+			};
+		},
 	},
 });
 
-const reducer = combineReducers({ coins: coinsSlice.reducer, workers: workersSlice.reducer });
+const reducer = combineReducers({
+	coins: coinsSlice.reducer,
+	incrementors: incrementorsSlice.reducer,
+});
 export type AppState = ReturnType<typeof reducer>;
 export const appStore = configureStore({
 	reducer,
 });
 export const actions = {
-	...workersSlice.actions,
+	...incrementorsSlice.actions,
 	...coinsSlice.actions,
 };

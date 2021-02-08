@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { INCREMENT_VALS } from '../../../constants';
 import { AppState } from '../../../state';
 import Texts from '../../../texts';
-import { Stat, Text } from '../../../types';
+import { Purchases, Stat, Text } from '../../../types';
 import './StatDisplay.scss';
 
 interface Props {
@@ -11,17 +11,21 @@ interface Props {
 	display?: keyof Text;
 }
 
-const StatDisplay: React.FC<Props> = ({ stat, display = 'default' }: Props): JSX.Element => {
-	const { coins, workers } = useSelector((state: AppState) => state);
+const StatDisplay: React.FC<Props> = ({ stat, display = 'plural' }: Props): JSX.Element => {
+	const state = useSelector((state: AppState) => state);
 
 	let val;
-	if (stat == 'coins') {
-		val = coins;
-	} else if (stat == 'coinsPerSecond') {
-		val = INCREMENT_VALS.worker * workers;
+	if (stat in state) {
+		val = state[stat as keyof AppState];
+	} else if (stat === 'coinsPerSecond') {
+		val = Object.values(Purchases).reduce(
+			(result, incrementor) =>
+				(result += state.incrementors[incrementor] * INCREMENT_VALS[incrementor] || 0),
+			0,
+		);
 	}
 
-	if (val === 1 && display === 'default') {
+	if (val === 1 && display === 'plural') {
 		display = 'singular';
 	}
 

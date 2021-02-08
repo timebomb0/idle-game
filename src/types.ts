@@ -1,6 +1,10 @@
 export type Stat = 'coins' | 'coinsPerSecond';
+export enum Purchases {
+	worker = 'worker',
+	noble = 'noble',
+}
 export interface Text {
-	default: string;
-	singular?: string;
+	plural: string;
+	singular: string;
 	abbr?: string;
 }

@@ -1,12 +1,13 @@
 import { Text } from '../types';
 
 export const coins: Text = {
-	default: 'Coins',
+	plural: 'Coins',
 	singular: 'Coin',
 	abbr: 'C',
 };
 
 export const coinsPerSecond: Text = {
-	default: 'Coins Per Second',
+	plural: 'Coins Per Second',
+	singular: 'Coins Per Second',
 	abbr: 'Cps',
 };

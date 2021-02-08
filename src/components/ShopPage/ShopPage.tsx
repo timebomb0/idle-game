@@ -5,23 +5,35 @@ import { PURCHASE_PRICE } from '../../constants';
 import Page from '../Layout/Page/Page';
 import { actions, AppState } from '../../state';
 import './ShopPage.scss';
+import Texts from '../../texts';
+import { Purchases } from '../../types';
 
 const ShopPage: React.FC = (): JSX.Element => {
 	const dispatch = useDispatch();
-	const { coins, workers } = useSelector((state: AppState) => state);
+	const { coins, incrementors } = useSelector((state: AppState) => state);
 
-	const purchaseWorker = () => {
-		dispatch(actions.decrementCoins(PURCHASE_PRICE.worker));
-		dispatch(actions.incrementWorkers(1));
+	const purchase = (incrementor: Purchases) => {
+		return () => {
+			dispatch(actions.decrementCoins(PURCHASE_PRICE[incrementor]));
+			dispatch(actions.addIncrementor({ amount: 1, type: incrementor }));
+		};
 	};
 
 	// TODO Create component displaying current amount, name of item, and purchase price
-	// TODO move hardcoded texts to texts folder
 	return (
 		<Page className="ShopPage">
-			<button onClick={purchaseWorker} disabled={coins < PURCHASE_PRICE.worker}>
-				[{workers}] Purchase Worker for {PURCHASE_PRICE.worker}
-			</button>
+			{Object.values(Purchases).map((incrementor) => {
+				return (
+					<button
+						key={incrementor}
+						onClick={purchase(incrementor)}
+						disabled={coins < PURCHASE_PRICE[incrementor]}
+					>
+						[{incrementors[incrementor]}] Purchase {Texts[incrementor].singular} for{' '}
+						{PURCHASE_PRICE[incrementor]}
+					</button>
+				);
+			})}
 		</Page>
 	);
 };
