@@ -1,8 +1,8 @@
 import React from 'react';
-import { MainPage } from './MainPage';
-import { ShopPage } from './ShopPage';
+import { IncrementorPage } from './IncrementorPage';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import useGameLoop from './hooks/useGameLoop';
+import { Page } from './Layout/Page';
 
 const App: React.FC = (): JSX.Element => {
 	useGameLoop();
@@ -12,10 +12,12 @@ const App: React.FC = (): JSX.Element => {
 			<div className="App">
 				<Switch>
 					<Route exact path="/">
-						<MainPage />
+						<Page className="">
+							<></>
+						</Page>
 					</Route>
 					<Route exact path="/shop">
-						<ShopPage />
+						<IncrementorPage />
 					</Route>
 				</Switch>
 

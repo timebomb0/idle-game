@@ -1,7 +1,6 @@
-import { Text, Stat, Purchases } from '../types';
+import { Text, Stat } from '../types';
 import { coins, coinsPerSecond } from './stats';
-import { worker, noble } from './purchases';
 
-type TextKeys = Stat | Purchases;
-const Texts: { [key in TextKeys]: Text } = { coins, coinsPerSecond, worker, noble };
+type TextKeys = Stat;
+const Texts: { [key in TextKeys]: Text } = { coins, coinsPerSecond };
 export default Texts;

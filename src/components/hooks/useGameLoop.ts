@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LOOP_MS, INCREMENT_VALS } from '../../constants';
+import config from '../../config';
+import { LOOP_MS } from '../../constants';
 import { actions, AppState } from '../../state';
-import { Purchases } from '../../types';
 
 export default (): void => {
 	const dispatch = useDispatch();
@@ -11,8 +11,8 @@ export default (): void => {
 	useEffect(() => {
 		const interval = window.setInterval(() => {
 			let gain = 0;
-			Object.values(Purchases).map((incrementor) => {
-				gain += INCREMENT_VALS[incrementor] * incrementors[incrementor] || 0;
+			config.incrementors.map((incrementor) => {
+				gain += incrementor.incrementAmount * incrementors[incrementor.id] || 0;
 			});
 			dispatch(actions.incrementCoins(gain));
 		}, LOOP_MS);

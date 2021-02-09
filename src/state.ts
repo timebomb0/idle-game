@@ -1,5 +1,5 @@
 import { combineReducers, configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Purchases } from './types';
+import config from './config';
 
 const coinsSlice = createSlice({
 	name: 'coins',
@@ -12,15 +12,16 @@ const coinsSlice = createSlice({
 
 interface IncrementorPayload {
 	amount: number;
-	type: Purchases;
+	type: string;
 }
-type IncrementorState = { [key in Purchases]: number };
+type IncrementorState = { [key: string]: number };
+
 const incrementorsSlice = createSlice({
 	name: 'incrementors',
-	initialState: {
-		[Purchases.worker]: 0,
-		[Purchases.noble]: 0,
-	} as IncrementorState,
+	initialState: config.incrementors.reduce((result, incrementor) => {
+		result[incrementor.id] = 0;
+		return result;
+	}, {} as IncrementorState),
 	reducers: {
 		addIncrementor: (state, action: PayloadAction<IncrementorPayload>) => {
 			return {
