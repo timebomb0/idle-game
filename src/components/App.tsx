@@ -5,6 +5,7 @@ import useGameLoop from './hooks/useGameLoop';
 import { Page } from './Layout/Page';
 
 const App: React.FC = (): JSX.Element => {
+	console.log('app rendered');
 	useGameLoop();
 
 	return (
