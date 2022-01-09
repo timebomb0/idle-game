@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@300;500;600&display=swap');
+
+* {
+	font-family: 'Oxanium', cursive;
+	font-weight: 500;
+}
+
+button {
+	border-radius: 4px;
+	text-align: center;
+	padding: 4px 6px;
+	cursor: pointer;
+	font-size: 20px;
+}
+
+button:active {
+	position: relative;
+	top: 1px;
+}

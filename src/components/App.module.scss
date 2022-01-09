@@ -1,0 +1,48 @@
+.AppContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+
+	.App {
+		width: 650px;
+		height: 452px;
+		padding: 0;
+		display: flex;
+		border: 5px solid #558;
+		border-radius: 10px;
+	}
+}
+
+.Menu {
+	display: block;
+	margin: 0;
+	padding: 0;
+	border-right: 2px solid #334;
+
+	li {
+		list-style-type: none;
+
+		a {
+			display: block;
+			cursor: pointer;
+			font-size: 22px;
+			padding: 6px;
+			text-align: center;
+			border-bottom: 3px solid #447;
+			margin: 0;
+			text-decoration: none;
+			user-select: none;
+		}
+
+		a:hover {
+			background-color: #cce;
+		}
+	}
+}
+
+.Content {
+	max-width: 100%;
+	max-height: 100%;
+	padding: 10px;
+}

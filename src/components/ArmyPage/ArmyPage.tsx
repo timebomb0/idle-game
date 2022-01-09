@@ -1,12 +1,13 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Page from '../Layout/Page/Page';
+import { Page, MenuStrip } from '../Layout';
 import { actions, AppState } from '../../state';
-import './IncrementorPage.scss';
+import './ArmyPage.scss';
 import config from '../../config';
+import { ProgressBar } from '../ProgressBar';
 
-const IncrementorPage: React.FC = (): JSX.Element => {
+const ArmyPage: React.FC = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const { coins, incrementors } = useSelector((state: AppState) => state);
 
@@ -16,9 +17,19 @@ const IncrementorPage: React.FC = (): JSX.Element => {
 			dispatch(actions.addIncrementor({ amount: 1, type: incrementor.id }));
 		};
 	};
+
+	const getCoin = () => {
+		dispatch(actions.incrementCoins(1));
+	};
+
 	// TODO Create component displaying current amount, name of item, and purchase price
 	return (
-		<Page className="IncrementorPage">
+		<Page className="ArmyPage">
+			<div className="main">
+				<button className="increment-coins" onClick={getCoin}>
+					Get Coin
+				</button>
+			</div>
 			{config.incrementors.map((incrementor) => {
 				return (
 					<button
@@ -31,8 +42,11 @@ const IncrementorPage: React.FC = (): JSX.Element => {
 					</button>
 				);
 			})}
+			<div className="bottom">
+				<MenuStrip />
+			</div>
 		</Page>
 	);
 };
 
-export default IncrementorPage;
+export default ArmyPage;
