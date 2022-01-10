@@ -1,5 +1,20 @@
 import { combineReducers, configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import config from './config';
+import { SoldierType, WorkerType } from './types';
+
+interface SoldierPayload {
+	amount: number;
+	type: SoldierType;
+}
+interface WorkerPayload {
+	amount: number;
+	type: WorkerType;
+}
+interface MessagePayload {
+	message?: string;
+}
+
+type basicState = { [key: string]: number };
 
 const coinsSlice = createSlice({
 	name: 'coins',
@@ -10,26 +25,20 @@ const coinsSlice = createSlice({
 	},
 });
 
-interface IncrementorPayload {
-	amount: number;
-	type: string;
-}
-type IncrementorState = { [key: string]: number };
-
-const incrementorsSlice = createSlice({
-	name: 'incrementors',
-	initialState: config.incrementors.reduce((result, incrementor) => {
-		result[incrementor.id] = 0;
+const soldiersSlice = createSlice({
+	name: 'soldiers',
+	initialState: config.soldiers.reduce((result, soldier) => {
+		result[soldier.id] = 0;
 		return result;
-	}, {} as IncrementorState),
+	}, {} as basicState),
 	reducers: {
-		addIncrementor: (state, action: PayloadAction<IncrementorPayload>) => {
+		addSoldier: (state, action: PayloadAction<SoldierPayload>) => {
 			return {
 				...state,
 				[action.payload.type]: state[action.payload.type] + action.payload.amount,
 			};
 		},
-		deleteIncrementor: (state, action: PayloadAction<IncrementorPayload>) => {
+		deleteSoldier: (state, action: PayloadAction<SoldierPayload>) => {
 			return {
 				...state,
 				[action.payload.type]: state[action.payload.type] - action.payload.amount,
@@ -38,15 +47,58 @@ const incrementorsSlice = createSlice({
 	},
 });
 
+const workersSlice = createSlice({
+	name: 'workers',
+	initialState: config.workers.reduce((result, soldier) => {
+		result[soldier.id] = 0;
+		return result;
+	}, {} as basicState),
+	reducers: {
+		addWorker: (state, action: PayloadAction<WorkerPayload>) => {
+			return {
+				...state,
+				[action.payload.type]: state[action.payload.type] + action.payload.amount,
+			};
+		},
+		deleteWorker: (state, action: PayloadAction<WorkerPayload>) => {
+			return {
+				...state,
+				[action.payload.type]: state[action.payload.type] - action.payload.amount,
+			};
+		},
+	},
+});
+
+const messagesSlice = createSlice({
+	name: 'messages',
+	initialState: [] as string[],
+	reducers: {
+		appendMessage: (state, action: PayloadAction<MessagePayload>) => {
+			const newState = [action.payload.message || '', ...state];
+			if (newState.length > config.messageLimit) {
+				newState.splice(newState.length - 1, 1);
+			}
+			return newState;
+		},
+		clearMessages: () => {
+			return [];
+		},
+	},
+});
+
 const reducer = combineReducers({
 	coins: coinsSlice.reducer,
-	incrementors: incrementorsSlice.reducer,
+	soldiers: soldiersSlice.reducer,
+	workers: workersSlice.reducer,
+	messages: messagesSlice.reducer,
 });
 export type AppState = ReturnType<typeof reducer>;
 export const appStore = configureStore({
 	reducer,
 });
 export const actions = {
-	...incrementorsSlice.actions,
+	...soldiersSlice.actions,
 	...coinsSlice.actions,
+	...workersSlice.actions,
+	...messagesSlice.actions,
 };

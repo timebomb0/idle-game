@@ -1,9 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import config from '../../../../config';
-import { AppState } from '../../../../state';
-import Texts from '../../../../texts';
-import { Stat, Text } from '../../../../types';
+import { AppState } from '../../state';
+import Texts from '../../texts';
+import { Stat, Text } from '../../types';
 import './StatDisplay.scss';
 
 interface Props {
@@ -17,12 +16,6 @@ const StatDisplay: React.FC<Props> = ({ stat, display = 'plural' }: Props): JSX.
 	let val;
 	if (stat in state) {
 		val = state[stat as keyof AppState];
-	} else if (stat === 'coinsPerSecond') {
-		val = config.incrementors.reduce(
-			(result, incrementor) =>
-				(result += state.incrementors[incrementor.id] * incrementor.incrementAmount || 0),
-			0,
-		);
 	}
 
 	if (val === 1 && display === 'plural') {
