@@ -14,7 +14,16 @@ interface MessagePayload {
 	message?: string;
 }
 
-type basicState = { [key: string]: number };
+type SoldierState = Record<SoldierType, number>;
+type WorkerState = Record<WorkerType, number>;
+
+const tickSlice = createSlice({
+	name: 'gameTick',
+	initialState: 0,
+	reducers: {
+		setTick: (state, action: PayloadAction<number>) => action.payload,
+	},
+});
 
 const coinsSlice = createSlice({
 	name: 'coins',
@@ -30,7 +39,7 @@ const soldiersSlice = createSlice({
 	initialState: config.soldiers.reduce((result, soldier) => {
 		result[soldier.id] = 0;
 		return result;
-	}, {} as basicState),
+	}, {} as SoldierState),
 	reducers: {
 		addSoldier: (state, action: PayloadAction<SoldierPayload>) => {
 			return {
@@ -52,7 +61,7 @@ const workersSlice = createSlice({
 	initialState: config.workers.reduce((result, soldier) => {
 		result[soldier.id] = 0;
 		return result;
-	}, {} as basicState),
+	}, {} as WorkerState),
 	reducers: {
 		addWorker: (state, action: PayloadAction<WorkerPayload>) => {
 			return {
@@ -91,6 +100,7 @@ const reducer = combineReducers({
 	soldiers: soldiersSlice.reducer,
 	workers: workersSlice.reducer,
 	messages: messagesSlice.reducer,
+	tick: tickSlice.reducer,
 });
 export type AppState = ReturnType<typeof reducer>;
 export const appStore = configureStore({
@@ -101,4 +111,5 @@ export const actions = {
 	...coinsSlice.actions,
 	...workersSlice.actions,
 	...messagesSlice.actions,
+	...tickSlice.actions,
 };

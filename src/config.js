@@ -2,6 +2,7 @@ import { SoldierType, WorkerType } from './types';
 
 export default {
 	messageLimit: 200,
+	grocerIncrementAmount: 1,
 	workers: [
 		{
 			id: WorkerType.Grocer,

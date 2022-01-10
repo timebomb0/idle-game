@@ -7,6 +7,7 @@ import { WorkersPage } from './WorkersPage';
 import { MessageList } from './MessageList';
 import styles from './App.module.scss';
 import { ExplorePage } from './ExplorePage';
+import { MainStats } from './MainStats';
 
 const App: React.FC = (): JSX.Element => {
 	useGameLoop();
@@ -16,6 +17,7 @@ const App: React.FC = (): JSX.Element => {
 			<div className={styles.AppContainer}>
 				<div className={styles.App}>
 					<div className={styles.GameContent}>
+						<MainStats className={styles.MainStats} />
 						<ul className={styles.Menu}>
 							<li>
 								<Link to="/">Explore</Link>

@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 
 import { Page } from '../Layout';
 import { actions } from '../../state';
-import { StatDisplay } from '../StatDisplay';
 import { randNum } from '../../util';
 import styles from './ExplorePage.module.scss';
 
@@ -22,10 +21,6 @@ const ExplorePage: React.FC = (): JSX.Element => {
 				<button className="increment-coins" onClick={getCoin}>
 					Scavenge
 				</button>
-			</div>
-
-			<div className="bottom">
-				<StatDisplay stat="coins" />
 			</div>
 		</Page>
 	);
