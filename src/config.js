@@ -10,7 +10,7 @@ export default {
 			texts: {
 				singular: 'Grocer',
 				plural: 'Grocers',
-				description: 'Sells necessities, netting you profits',
+				description: 'Sells necessities, netting you coins',
 			},
 			purchasePrice: 10,
 		},

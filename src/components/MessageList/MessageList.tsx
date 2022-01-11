@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import ScrollableFeed from 'react-scrollable-feed';
 import cls from 'classnames';
-import { AppState } from '../../state';
+import { AppState, MessageState } from '../../state';
 import styles from './MessageList.module.scss';
 
 interface Props {
@@ -9,15 +10,16 @@ interface Props {
 }
 
 const MessageList: React.FC<Props> = ({ className }: Props): JSX.Element => {
-	const { messages } = useSelector((state: AppState) => state);
+	const messages = useSelector((state: AppState) => state.messages) as MessageState;
+
 	return (
-		<div className={cls(styles.MessageList, className)}>
-			{messages.map((message, idx) => (
-				<div key={idx} className={styles.Message}>
-					{message}
+		<ScrollableFeed className={cls(styles.MessageList, className)}>
+			{messages.map((messageObj) => (
+				<div key={messageObj.id} className={styles.Message}>
+					{messageObj.message}
 				</div>
 			))}
-		</div>
+		</ScrollableFeed>
 	);
 };
 

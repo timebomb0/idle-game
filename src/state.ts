@@ -20,8 +20,14 @@ interface MessagePayload {
 	message?: string;
 }
 
+interface MessageItem {
+	id: number;
+	message: string;
+}
+
 export type SoldierState = Record<SoldierType, number>;
 type WorkerState = Record<WorkerType, number>;
+export type MessageState = MessageItem[];
 
 const tickSlice = createSlice({
 	name: 'gameTick',
@@ -94,13 +100,19 @@ const workersSlice = createSlice({
 
 const messagesSlice = createSlice({
 	name: 'messages',
-	initialState: [] as string[],
+	initialState: [] as MessageState,
 	reducers: {
 		appendMessage: (state, action: PayloadAction<MessagePayload>) => {
-			const newState = [action.payload.message || '', ...state];
-			if (newState.length > config.messageLimit) {
-				newState.splice(newState.length - 1, 1);
+			const prevId = state[state.length - 1]?.id || 1;
+			let id = 1;
+			if (prevId < Number.MAX_SAFE_INTEGER) {
+				id = prevId + 1;
 			}
+			const newMessage = {
+				id,
+				message: action.payload.message || '',
+			};
+			const newState = [...state, newMessage];
 			return newState;
 		},
 		clearMessages: () => {

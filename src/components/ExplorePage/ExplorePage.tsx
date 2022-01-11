@@ -17,14 +17,13 @@ const ExplorePage: React.FC = (): JSX.Element => {
 
 	return (
 		<Page className={styles.ExplorePage}>
-			<button onClick={getCoin}>Scavenge</button>
-			<button disabled>???</button>
-			<button disabled>???</button>
-			<button disabled>???</button>
-			<button disabled>???</button>
-			<button disabled>???</button>
-			<button disabled>???</button>
-			<button disabled>???</button>
+			<div>
+				<div>
+					<div>
+						<button onClick={getCoin}>Scavenge</button>
+					</div>
+				</div>
+			</div>
 		</Page>
 	);
 };
