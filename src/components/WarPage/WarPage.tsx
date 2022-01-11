@@ -5,7 +5,6 @@ import { Page } from '../Layout';
 import { actions, AppState, SoldierState } from '../../state';
 import { getArmyStrength, randNum } from '../../util';
 import styles from './WarPage.module.scss';
-import { StatDisplay } from '../StatDisplay';
 import { EnemyArmy } from '../../types';
 
 const WarPage: React.FC = (): JSX.Element => {

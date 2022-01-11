@@ -19,7 +19,7 @@ const WorkersPage: React.FC = (): JSX.Element => {
 	};
 
 	return (
-		<Page className="WorkersPage">
+		<Page className={styles.WorkersPage}>
 			{config.workers.map((worker) => {
 				return (
 					<GameTooltip
@@ -28,7 +28,6 @@ const WorkersPage: React.FC = (): JSX.Element => {
 						description={worker.texts.description}
 					>
 						<button
-							className={styles.PurchaseButton}
 							key={worker.id}
 							onClick={purchase(worker)}
 							disabled={coins < worker.purchasePrice}
@@ -39,6 +38,12 @@ const WorkersPage: React.FC = (): JSX.Element => {
 					</GameTooltip>
 				);
 			})}
+			<button disabled>???</button>
+			<button disabled>???</button>
+			<button disabled>???</button>
+			<button style={{ borderBottom: 'none' }} disabled>
+				???
+			</button>
 		</Page>
 	);
 };

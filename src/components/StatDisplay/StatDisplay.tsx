@@ -4,7 +4,6 @@ import { abbreviateNumber } from 'js-abbreviation-number';
 import { AppState } from '../../state';
 import Texts from '../../texts';
 import { SoldierType, Stat, Text } from '../../types';
-import './StatDisplay.scss';
 import config from '../../config';
 import { getArmyStrengthStr, symbolsTexts } from '../../util';
 

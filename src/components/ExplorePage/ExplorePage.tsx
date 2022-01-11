@@ -18,9 +18,13 @@ const ExplorePage: React.FC = (): JSX.Element => {
 	return (
 		<Page className={styles.ExplorePage}>
 			<button onClick={getCoin}>Scavenge</button>
-			<button disabled onClick={getCoin}>
-				???
-			</button>
+			<button disabled>???</button>
+			<button disabled>???</button>
+			<button disabled>???</button>
+			<button disabled>???</button>
+			<button disabled>???</button>
+			<button disabled>???</button>
+			<button disabled>???</button>
 		</Page>
 	);
 };

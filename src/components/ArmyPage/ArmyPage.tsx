@@ -29,7 +29,7 @@ const ArmyPage: React.FC = (): JSX.Element => {
 
 	// TODO Create component displaying current amount, name of item, and purchase price
 	return (
-		<Page className="ArmyPage">
+		<Page className={styles.ArmyPage}>
 			{config.soldiers.map((soldier) => {
 				return (
 					<GameTooltip
@@ -43,7 +43,6 @@ const ArmyPage: React.FC = (): JSX.Element => {
 						}}
 					>
 						<button
-							className={styles.PurchaseButton}
 							key={soldier.id}
 							onClick={purchase(soldier)}
 							disabled={coins < soldier.purchasePrice}
@@ -54,6 +53,11 @@ const ArmyPage: React.FC = (): JSX.Element => {
 					</GameTooltip>
 				);
 			})}
+			<button disabled>???</button>
+			<button disabled>???</button>
+			<button style={{ borderBottom: 'none' }} disabled>
+				???
+			</button>
 		</Page>
 	);
 };

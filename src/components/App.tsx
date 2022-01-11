@@ -9,6 +9,7 @@ import styles from './App.module.scss';
 import { ExplorePage } from './ExplorePage';
 import { MainStats } from './MainStats';
 import WarPage from './WarPage/WarPage';
+import { StatsPage } from './StatsPage';
 
 const App: React.FC = (): JSX.Element => {
 	useGameLoop();
@@ -41,6 +42,9 @@ const App: React.FC = (): JSX.Element => {
 							<li>
 								<Link to="/duels">Duels</Link>
 							</li>
+							<li>
+								<Link to="/stats">Stats</Link>
+							</li>
 						</ul>
 						<div className={styles.Content}>
 							<Switch>
@@ -70,6 +74,9 @@ const App: React.FC = (): JSX.Element => {
 									<Page className="">
 										<></>
 									</Page>
+								</Route>
+								<Route exact path="/stats">
+									<StatsPage />
 								</Route>
 							</Switch>
 						</div>
