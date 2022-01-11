@@ -6,8 +6,8 @@ export const coins: Text = {
 	abbr: 'C',
 };
 
-export const coinsPerSecond: Text = {
-	plural: 'Coins Per Second',
-	singular: 'Coins Per Second',
-	abbr: 'Cps',
+export const armyStrength: Text = {
+	plural: 'Army Strength',
+	singular: 'Army Strength',
+	abbr: 'Str',
 };

@@ -1,6 +1,12 @@
-import { combineReducers, configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+	Action,
+	combineReducers,
+	configureStore,
+	createSlice,
+	PayloadAction,
+} from '@reduxjs/toolkit';
 import config from './config';
-import { SoldierType, WorkerType } from './types';
+import { EnemyArmy, SoldierType, WorkerType } from './types';
 
 interface SoldierPayload {
 	amount: number;
@@ -14,7 +20,7 @@ interface MessagePayload {
 	message?: string;
 }
 
-type SoldierState = Record<SoldierType, number>;
+export type SoldierState = Record<SoldierType, number>;
 type WorkerState = Record<WorkerType, number>;
 
 const tickSlice = createSlice({
@@ -22,6 +28,14 @@ const tickSlice = createSlice({
 	initialState: 0,
 	reducers: {
 		setTick: (state, action: PayloadAction<number>) => action.payload,
+	},
+});
+
+const enemyArmySlice = createSlice({
+	name: 'enemyArmy',
+	initialState: { name: '', strength: 0 },
+	reducers: {
+		setEnemyArmy: (state, action: PayloadAction<EnemyArmy>) => action.payload,
 	},
 });
 
@@ -100,6 +114,7 @@ const reducer = combineReducers({
 	soldiers: soldiersSlice.reducer,
 	workers: workersSlice.reducer,
 	messages: messagesSlice.reducer,
+	enemyArmy: enemyArmySlice.reducer,
 	tick: tickSlice.reducer,
 });
 export type AppState = ReturnType<typeof reducer>;
@@ -111,5 +126,6 @@ export const actions = {
 	...coinsSlice.actions,
 	...workersSlice.actions,
 	...messagesSlice.actions,
+	...enemyArmySlice.actions,
 	...tickSlice.actions,
 };

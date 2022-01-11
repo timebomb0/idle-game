@@ -6,6 +6,7 @@ import { actions, AppState } from '../../state';
 import config from '../../config';
 import styles from './ArmyPage.module.scss';
 import { SoldierType } from '../../types';
+import { GameTooltip } from '../GameTooltip';
 
 const ArmyPage: React.FC = (): JSX.Element => {
 	const dispatch = useDispatch();
@@ -31,15 +32,26 @@ const ArmyPage: React.FC = (): JSX.Element => {
 		<Page className="ArmyPage">
 			{config.soldiers.map((soldier) => {
 				return (
-					<button
-						className={styles.PurchaseButton}
+					<GameTooltip
 						key={soldier.id}
-						onClick={purchase(soldier)}
-						disabled={coins < soldier.purchasePrice}
+						name={soldier.texts.singular}
+						properties={{
+							'Army Strength': `+${soldier.strength} each`,
+							'Army Strength Gained': (
+								soldiers[soldier.id] * soldier.strength
+							).toString(),
+						}}
 					>
-						[{soldiers[soldier.id]}] Purchase {soldier.texts.singular} for{' '}
-						{soldier.purchasePrice.toLocaleString('en-US')}
-					</button>
+						<button
+							className={styles.PurchaseButton}
+							key={soldier.id}
+							onClick={purchase(soldier)}
+							disabled={coins < soldier.purchasePrice}
+						>
+							[{soldiers[soldier.id]}] Purchase {soldier.texts.singular} for{' '}
+							{soldier.purchasePrice.toLocaleString('en-US')}
+						</button>
+					</GameTooltip>
 				);
 			})}
 		</Page>

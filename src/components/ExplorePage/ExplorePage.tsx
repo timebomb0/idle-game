@@ -16,12 +16,11 @@ const ExplorePage: React.FC = (): JSX.Element => {
 	};
 
 	return (
-		<Page className="ExplorePage">
-			<div className="main">
-				<button className="increment-coins" onClick={getCoin}>
-					Scavenge
-				</button>
-			</div>
+		<Page className={styles.ExplorePage}>
+			<button onClick={getCoin}>Scavenge</button>
+			<button disabled onClick={getCoin}>
+				???
+			</button>
 		</Page>
 	);
 };

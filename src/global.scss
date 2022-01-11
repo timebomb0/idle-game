@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@300;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@300;500;600;700&display=swap');
 
 html,
 body,
@@ -46,14 +46,25 @@ button {
 	user-select: none;
 	width: 100%;
 	text-align: center;
-}
 
-button:disabled {
-	opacity: 0.75;
-	cursor: not-allowed;
-}
+	&:disabled {
+		background-color: #bbbbbb;
+		color: #666;
+		cursor: not-allowed;
+	}
 
-button:active {
-	position: relative;
-	top: 1px;
+	&:active {
+		animation: pulse 0.5s forwards;
+		box-shadow: inset 0px 0px 50px #514e49;
+	}
+
+	@keyframes pulse {
+		0% {
+			box-shadow: inset 0px 0px 50px #514e49;
+		}
+
+		100% {
+			box-shadow: inset 0px 0px 2px #fff;
+		}
+	}
 }

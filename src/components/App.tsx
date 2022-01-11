@@ -8,6 +8,7 @@ import { MessageList } from './MessageList';
 import styles from './App.module.scss';
 import { ExplorePage } from './ExplorePage';
 import { MainStats } from './MainStats';
+import WarPage from './WarPage/WarPage';
 
 const App: React.FC = (): JSX.Element => {
 	useGameLoop();
@@ -63,9 +64,7 @@ const App: React.FC = (): JSX.Element => {
 									</Page>
 								</Route>
 								<Route exact path="/war">
-									<Page className="">
-										<></>
-									</Page>
+									<WarPage />
 								</Route>
 								<Route exact path="/duels">
 									<Page className="">

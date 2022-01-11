@@ -1,3 +1,10 @@
-.PurchaseButton {
-	margin: 5px 0;
+.ExplorePage {
+	button:not(:disabled) {
+		background-color: #444499;
+		color: #eee;
+	}
+
+	button {
+		border-bottom: 3px solid #111166;
+	}
 }

@@ -5,11 +5,13 @@ import config from '../../config';
 import { LOOP_MS } from '../../constants';
 import { actions, AppState } from '../../state';
 import { WorkerType } from '../../types';
+import { randNum } from '../../util';
 import useInterval from './useInterval';
 
 export default (): void => {
 	const dispatch = useDispatch();
 	const [loopInterval, setLoopInterval] = useState(0);
+	const [enemyArmyTick, setEnemyArmyTick] = useState(0);
 	const soldiers = useSelector((state: AppState) => state.soldiers);
 	const workers = useSelector((state: AppState) => state.workers);
 
@@ -29,6 +31,13 @@ export default (): void => {
 		if (workers[WorkerType.Grocer]) {
 			const gain = workers[WorkerType.Grocer] * config.grocerIncrementAmount;
 			dispatch(actions.incrementCoins(gain));
+		}
+
+		if (enemyArmyTick >= config.enemyArmyUpdateInterval) {
+			dispatch(actions.setEnemyArmy({ name: 'test', strength: randNum(1, 100) }));
+			setEnemyArmyTick(0);
+		} else {
+			setEnemyArmyTick(enemyArmyTick + 1);
 		}
 	};
 };

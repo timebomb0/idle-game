@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux';
 import { abbreviateNumber } from 'js-abbreviation-number';
 import { AppState } from '../../state';
 import Texts from '../../texts';
-import { Stat, Text } from '../../types';
+import { SoldierType, Stat, Text } from '../../types';
 import './StatDisplay.scss';
+import config from '../../config';
+import { getArmyStrengthStr, symbolsTexts } from '../../util';
 
 interface Props {
 	stat: Stat;
@@ -22,7 +24,9 @@ const StatDisplay: React.FC<Props> = ({
 	const state = useSelector((state: AppState) => state);
 
 	let val;
-	if (stat in state) {
+	if (stat === 'armyStrength') {
+		val = getArmyStrengthStr(state.soldiers);
+	} else if (stat in state) {
 		val = state[stat as keyof AppState];
 	}
 
@@ -34,33 +38,7 @@ const StatDisplay: React.FC<Props> = ({
 		<div className={className ?? ''}>
 			<b className={className ?? ''}>{Texts[stat][display]}</b>:{' '}
 			{abbreviateNum && typeof val === 'number'
-				? abbreviateNumber(val, 2, {
-						// borrowed from https://idlechampions.fandom.com/wiki/Large_number_abbreviations - Thanks!
-						symbols: [
-							'',
-							'K',
-							'M',
-							'B',
-							't',
-							'q',
-							'Q',
-							's',
-							'S',
-							'o',
-							'n',
-							'd',
-							'U',
-							'T',
-							'Qt',
-							'Qd',
-							'Sd',
-							'St',
-							'O',
-							'N',
-							'v',
-							'c',
-						],
-				  })
+				? abbreviateNumber(val, 2, symbolsTexts)
 				: val}
 		</div>
 	);
