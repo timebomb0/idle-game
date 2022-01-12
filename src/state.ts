@@ -1,12 +1,9 @@
-import {
-	Action,
-	combineReducers,
-	configureStore,
-	createSlice,
-	PayloadAction,
-} from '@reduxjs/toolkit';
+import { combineReducers, configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { warn } from 'console';
+import { StatsPage } from './components/StatsPage';
 import config from './config';
 import { EnemyArmy, SoldierType, WorkerType } from './types';
+import { getArmyDefense, getArmyOffense } from './util';
 
 interface SoldierPayload {
 	amount: number;
@@ -25,23 +22,102 @@ interface MessageItem {
 	message: string;
 }
 
+interface UpdateRemainingArmy {
+	yourRemainingArmy: ArmyStats;
+	enemyRemainingArmy: ArmyStats;
+}
+
+type ArmyStats = { offense: number; defense: number };
+export interface WarState {
+	isActive: boolean;
+	yourRemainingArmy: ArmyStats;
+	enemyRemainingArmy: ArmyStats;
+}
 export type SoldierState = Record<SoldierType, number>;
 type WorkerState = Record<WorkerType, number>;
 export type MessageState = MessageItem[];
+
+interface ArmyState {
+	war: WarState;
+	soldiers: SoldierState;
+	enemyArmy: EnemyArmy;
+}
+
+const armySlice = createSlice({
+	name: 'army',
+	initialState: {
+		war: {
+			isActive: false,
+			yourRemainingArmy: { offense: 0, defense: 0 },
+			enemyRemainingArmy: { offense: 0, defense: 0 },
+		},
+		soldiers: config.soldiers.reduce((result, soldier) => {
+			result[soldier.id] = 0;
+			return result;
+		}, {} as SoldierState),
+		enemyArmy: { name: '', offense: 0, defense: 0 },
+	} as ArmyState,
+	reducers: {
+		startWar: (state) => ({
+			...state,
+			war: {
+				isActive: true,
+				yourRemainingArmy: {
+					offense: getArmyOffense(state.soldiers),
+					defense: getArmyDefense(state.soldiers),
+				},
+				enemyRemainingArmy: {
+					offense: state.enemyArmy.offense,
+					defense: state.enemyArmy.defense,
+				},
+			},
+		}),
+		stopWar: (state) => {
+			return {
+				...state,
+				war: {
+					isActive: false,
+					yourRemainingArmy: { offense: 0, defense: 0 },
+					enemyRemainingArmy: { offense: 0, defense: 0 },
+				},
+			};
+		},
+		updateRemainingArmy: (state, action: PayloadAction<UpdateRemainingArmy>) => ({
+			...state,
+			war: { ...state.war, ...action.payload },
+		}),
+		addSoldier: (state, action: PayloadAction<SoldierPayload>) => {
+			return {
+				...state,
+				soldiers: {
+					...state.soldiers,
+					[action.payload.type]:
+						state.soldiers[action.payload.type] + action.payload.amount,
+				},
+			};
+		},
+		deleteSoldier: (state, action: PayloadAction<SoldierPayload>) => {
+			return {
+				...state,
+				soldiers: {
+					...state.soldiers,
+					[action.payload.type]:
+						state.soldiers[action.payload.type] - action.payload.amount,
+				},
+			};
+		},
+		setEnemyArmy: (state, action: PayloadAction<EnemyArmy>) => ({
+			...state,
+			enemyArmy: action.payload,
+		}),
+	},
+});
 
 const tickSlice = createSlice({
 	name: 'gameTick',
 	initialState: 0,
 	reducers: {
 		setTick: (state, action: PayloadAction<number>) => action.payload,
-	},
-});
-
-const enemyArmySlice = createSlice({
-	name: 'enemyArmy',
-	initialState: { name: '', strength: 0 },
-	reducers: {
-		setEnemyArmy: (state, action: PayloadAction<EnemyArmy>) => action.payload,
 	},
 });
 
@@ -54,25 +130,12 @@ const coinsSlice = createSlice({
 	},
 });
 
-const soldiersSlice = createSlice({
-	name: 'soldiers',
-	initialState: config.soldiers.reduce((result, soldier) => {
-		result[soldier.id] = 0;
-		return result;
-	}, {} as SoldierState),
+const reputationSlice = createSlice({
+	name: 'reputation',
+	initialState: 0,
 	reducers: {
-		addSoldier: (state, action: PayloadAction<SoldierPayload>) => {
-			return {
-				...state,
-				[action.payload.type]: state[action.payload.type] + action.payload.amount,
-			};
-		},
-		deleteSoldier: (state, action: PayloadAction<SoldierPayload>) => {
-			return {
-				...state,
-				[action.payload.type]: state[action.payload.type] - action.payload.amount,
-			};
-		},
+		incrementReputation: (state, action: PayloadAction<number>) => state + action.payload,
+		decrementReputation: (state, action: PayloadAction<number>) => state - action.payload,
 	},
 });
 
@@ -123,21 +186,21 @@ const messagesSlice = createSlice({
 
 const reducer = combineReducers({
 	coins: coinsSlice.reducer,
-	soldiers: soldiersSlice.reducer,
 	workers: workersSlice.reducer,
 	messages: messagesSlice.reducer,
-	enemyArmy: enemyArmySlice.reducer,
 	tick: tickSlice.reducer,
+	reputation: reputationSlice.reducer,
+	army: armySlice.reducer,
 });
 export type AppState = ReturnType<typeof reducer>;
 export const appStore = configureStore({
 	reducer,
 });
 export const actions = {
-	...soldiersSlice.actions,
 	...coinsSlice.actions,
 	...workersSlice.actions,
 	...messagesSlice.actions,
-	...enemyArmySlice.actions,
 	...tickSlice.actions,
+	...reputationSlice.actions,
+	...armySlice.actions,
 };

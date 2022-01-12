@@ -10,7 +10,8 @@ import { GameTooltip } from '../GameTooltip';
 
 const ArmyPage: React.FC = (): JSX.Element => {
 	const dispatch = useDispatch();
-	const { coins, soldiers } = useSelector((state: AppState) => state);
+	const coins = useSelector((state: AppState) => state.coins);
+	const { soldiers } = useSelector((state: AppState) => state.army);
 
 	const purchase = (soldier: { id: SoldierType; purchasePrice: number }) => {
 		return () => {
@@ -36,10 +37,8 @@ const ArmyPage: React.FC = (): JSX.Element => {
 						key={soldier.id}
 						name={soldier.texts.singular}
 						properties={{
-							'Army Strength': `+${soldier.strength} each`,
-							'Army Strength Gained': (
-								soldiers[soldier.id] * soldier.strength
-							).toString(),
+							'Army Offense': `+${soldier.offense} per 1`,
+							'Army Defense': `+${soldier.defense} per 1`,
 						}}
 					>
 						<button
@@ -53,7 +52,6 @@ const ArmyPage: React.FC = (): JSX.Element => {
 					</GameTooltip>
 				);
 			})}
-			<button disabled>???</button>
 			<button disabled>???</button>
 			<button style={{ borderBottom: 'none' }} disabled>
 				???

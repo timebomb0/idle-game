@@ -1,4 +1,4 @@
-export type Stat = 'coins' | 'armyStrength';
+export type Stat = 'coins' | 'armyOffense' | 'armyDefense' | 'reputation';
 export interface Text {
 	plural: string;
 	singular: string;
@@ -15,12 +15,14 @@ export enum WorkerType {
 export enum SoldierType {
 	Peasant = 1,
 	Infantry = 2,
-	Cavalry = 3,
-	Archer = 4,
-	Knight = 5,
+	Guardsman = 3,
+	Cavalry = 4,
+	Archer = 5,
+	Knight = 6,
 }
 
 export interface EnemyArmy {
-	strength: number;
+	offense: number;
+	defense: number;
 	name: string;
 }

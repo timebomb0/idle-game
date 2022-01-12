@@ -8,7 +8,7 @@
 	color: #eee;
 	margin: 3px 0;
 	font-size: 14px;
-	animation: fadein 1.5s;
+	animation: fadein 1.3s;
 
 	/*  must keep height set consistently.
 		if height isnt consistent and font size changes,
@@ -19,7 +19,7 @@
 
 @keyframes fadein {
 	from {
-		opacity: 0;
+		opacity: 0.3;
 		font-size: 12px;
 	}
 	to {

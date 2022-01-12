@@ -1,5 +1,9 @@
 .ArmyPage {
+	button:not(:disabled) {
+		background-color: #cf5000;
+		color: #eee;
+	}
 	button {
-		border-bottom: 3px solid #474;
+		border-bottom: 3px solid #730;
 	}
 }

@@ -6,8 +6,20 @@ export const coins: Text = {
 	abbr: 'C',
 };
 
-export const armyStrength: Text = {
-	plural: 'Army Strength',
-	singular: 'Army Strength',
-	abbr: 'Str',
+export const armyOffense: Text = {
+	plural: 'Army Offense',
+	singular: 'Army Offense',
+	abbr: 'Offense',
+};
+
+export const armyDefense: Text = {
+	plural: 'Army Offense',
+	singular: 'Army Offense',
+	abbr: 'Defense',
+};
+
+export const reputation: Text = {
+	plural: 'Reputation',
+	singular: 'Reputation',
+	abbr: 'Rep',
 };

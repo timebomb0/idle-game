@@ -3,7 +3,7 @@ import { SoldierType, WorkerType } from './types';
 export default {
 	messageLimit: 200,
 	grocerIncrementAmount: 1,
-	enemyArmyUpdateInterval: 10,
+	enemyArmyUpdateInterval: 5,
 	workers: [
 		{
 			id: WorkerType.Grocer,
@@ -50,7 +50,8 @@ export default {
 				plural: 'Peasants',
 			},
 			purchasePrice: 10,
-			strength: 1,
+			offense: 1,
+			defense: 0,
 		},
 		{
 			id: SoldierType.Infantry,
@@ -58,8 +59,19 @@ export default {
 				singular: 'Infantry',
 				plural: 'Infantry',
 			},
-			purchasePrice: 200,
-			strength: 10,
+			purchasePrice: 100,
+			offense: 10,
+			defense: 2,
+		},
+		{
+			id: SoldierType.Guardsman,
+			texts: {
+				singular: 'Guardsman',
+				plural: 'Guardsmen',
+			},
+			purchasePrice: 500,
+			offense: 10,
+			defense: 20,
 		},
 		{
 			id: SoldierType.Cavalry,
@@ -67,8 +79,9 @@ export default {
 				singular: 'Cavalry',
 				plural: 'Cavalry',
 			},
-			purchasePrice: 3000,
-			strength: 50,
+			purchasePrice: 800,
+			offense: 30,
+			defense: 6,
 		},
 		{
 			id: SoldierType.Archer,
@@ -76,8 +89,9 @@ export default {
 				singular: 'Archer',
 				plural: 'Archers',
 			},
-			purchasePrice: 20000,
-			strength: 200,
+			purchasePrice: 1500,
+			offense: 100,
+			defense: 0,
 		},
 		{
 			id: SoldierType.Knight,
@@ -85,8 +99,9 @@ export default {
 				singular: 'Knight',
 				plural: 'Knights',
 			},
-			purchasePrice: 100000,
-			strength: 500,
+			purchasePrice: 3500,
+			offense: 90,
+			defense: 100,
 		},
 	],
 };

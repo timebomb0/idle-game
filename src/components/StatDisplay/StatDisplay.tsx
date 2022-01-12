@@ -5,7 +5,7 @@ import { AppState } from '../../state';
 import Texts from '../../texts';
 import { SoldierType, Stat, Text } from '../../types';
 import config from '../../config';
-import { getArmyStrengthStr, symbolsTexts } from '../../util';
+import { getArmyDefenseText, getArmyOffenseText, symbolsTexts } from '../../util';
 
 interface Props {
 	stat: Stat;
@@ -23,8 +23,10 @@ const StatDisplay: React.FC<Props> = ({
 	const state = useSelector((state: AppState) => state);
 
 	let val;
-	if (stat === 'armyStrength') {
-		val = getArmyStrengthStr(state.soldiers);
+	if (stat === 'armyOffense') {
+		val = getArmyOffenseText(state.army.soldiers);
+	} else if (stat === 'armyDefense') {
+		val = getArmyDefenseText(state.army.soldiers);
 	} else if (stat in state) {
 		val = state[stat as keyof AppState];
 	}

@@ -37,22 +37,24 @@ export function randNum(min: number, max: number): number {
 	return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
 
-export function getArmyStrengthStr(soldiers: SoldierState): string {
-	return abbreviateNumber(
-		Object.keys(soldiers).reduce<number>((totalStrength, soldierKey) => {
-			const soldierType = parseInt(soldierKey) as SoldierType;
-			return (
-				totalStrength + soldiers[soldierType] * config.soldiers[soldierType - 1].strength
-			);
-		}, 0),
-		2,
-		symbolsTexts,
-	);
+export function getArmyDefenseText(soldiers: SoldierState): string {
+	return abbreviateNumber(getArmyDefense(soldiers), 2, symbolsTexts);
 }
 
-export function getArmyStrength(soldiers: SoldierState): number {
-	return Object.keys(soldiers).reduce<number>((totalStrength, soldierKey) => {
+export function getArmyDefense(soldiers: SoldierState): number {
+	return Object.keys(soldiers).reduce<number>((totalDefense, soldierKey) => {
 		const soldierType = parseInt(soldierKey) as SoldierType;
-		return totalStrength + soldiers[soldierType] * config.soldiers[soldierType - 1].strength;
+		return totalDefense + soldiers[soldierType] * config.soldiers[soldierType - 1].defense;
+	}, 0);
+}
+
+export function getArmyOffenseText(soldiers: SoldierState): string {
+	return abbreviateNumber(getArmyOffense(soldiers), 2, symbolsTexts);
+}
+
+export function getArmyOffense(soldiers: SoldierState): number {
+	return Object.keys(soldiers).reduce<number>((totalOffense, soldierKey) => {
+		const soldierType = parseInt(soldierKey) as SoldierType;
+		return totalOffense + soldiers[soldierType] * config.soldiers[soldierType - 1].offense;
 	}, 0);
 }

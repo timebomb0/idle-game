@@ -16,7 +16,9 @@ const MainStats: React.FC<Props> = ({ className }: Props): JSX.Element => {
 		<div className={cls(className, styles.MainStats)}>
 			<ProgressBar progress={tick} />
 			<StatDisplay className={styles.Stat} stat="coins" abbreviateNum={true} />
-			<StatDisplay className={styles.Stat} stat="armyStrength" abbreviateNum={true} />
+			<StatDisplay className={styles.Stat} stat="armyOffense" abbreviateNum={true} />
+			<StatDisplay className={styles.Stat} stat="armyDefense" abbreviateNum={true} />
+			<StatDisplay className={styles.Stat} stat="reputation" abbreviateNum={true} />
 		</div>
 	);
 };
