@@ -1,19 +1,12 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Page } from '../Layout';
-import { actions, AppState, SoldierState, WarState } from '../../state';
-import { getArmyDefense, getArmyOffense } from '../../util';
+import { AppState, WarState } from '../../state';
 import styles from './WarPage.module.scss';
-import { EnemyArmy } from '../../types';
 
 const ActiveWar: React.FC = (): JSX.Element => {
-	const dispatch = useDispatch();
 	const war = useSelector<AppState>((state) => state.army.war) as WarState;
-
-	const fight = () => {
-		return null;
-	};
 
 	return (
 		<Page className={styles.ActiveWar}>

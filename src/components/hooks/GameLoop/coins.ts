@@ -1,5 +1,5 @@
 import { Dispatch } from '@reduxjs/toolkit';
-import config from '../../../config';
+import data from '../../../game_data';
 import { actions, WorkerState } from '../../../state';
 import { WorkerType } from '../../../types';
 
@@ -11,7 +11,7 @@ export default function ({
 	dispatch: Dispatch;
 }): void {
 	if (workers[WorkerType.Peddler]) {
-		const gain = workers[WorkerType.Peddler] * config.peddlerIncrementAmount;
+		const gain = workers[WorkerType.Peddler] * data.coins.peddlerIncrementAmount;
 		dispatch(actions.incrementCoins(gain));
 	}
 }

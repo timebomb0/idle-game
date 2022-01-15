@@ -1,6 +1,6 @@
 import { abbreviateNumber } from 'js-abbreviation-number';
-import config from './config';
-import { AppState, SoldierState } from './state';
+import data from './game_data';
+import { SoldierState } from './state';
 import { SoldierType } from './types';
 
 export const symbolsTexts = {
@@ -44,7 +44,7 @@ export function getArmyDefenseText(soldiers: SoldierState): string {
 export function getArmyDefense(soldiers: SoldierState): number {
 	return Object.keys(soldiers).reduce<number>((totalDefense, soldierKey) => {
 		const soldierType = parseInt(soldierKey) as SoldierType;
-		return totalDefense + soldiers[soldierType] * config.soldiers[soldierType - 1].defense;
+		return totalDefense + soldiers[soldierType] * data.soldiers[soldierType - 1].defense;
 	}, 0);
 }
 
@@ -55,6 +55,6 @@ export function getArmyOffenseText(soldiers: SoldierState): string {
 export function getArmyOffense(soldiers: SoldierState): number {
 	return Object.keys(soldiers).reduce<number>((totalOffense, soldierKey) => {
 		const soldierType = parseInt(soldierKey) as SoldierType;
-		return totalOffense + soldiers[soldierType] * config.soldiers[soldierType - 1].offense;
+		return totalOffense + soldiers[soldierType] * data.soldiers[soldierType - 1].offense;
 	}, 0);
 }

@@ -1,7 +1,5 @@
 import { combineReducers, configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { warn } from 'console';
-import { StatsPage } from './components/StatsPage';
-import config from './config';
+import data from './game_data';
 import { EnemyArmy, SoldierType, WorkerType } from './types';
 import { getArmyDefense, getArmyOffense } from './util';
 
@@ -51,7 +49,7 @@ const armySlice = createSlice({
 			yourRemainingArmy: { offense: 0, defense: 0 },
 			enemyRemainingArmy: { offense: 0, defense: 0 },
 		},
-		soldiers: config.soldiers.reduce((result, soldier) => {
+		soldiers: data.soldiers.reduce((result, soldier) => {
 			result[soldier.id] = 0;
 			return result;
 		}, {} as SoldierState),
@@ -141,7 +139,7 @@ const reputationSlice = createSlice({
 
 const workersSlice = createSlice({
 	name: 'workers',
-	initialState: config.workers.reduce((result, soldier) => {
+	initialState: data.workers.reduce((result, soldier) => {
 		result[soldier.id] = 0;
 		return result;
 	}, {} as WorkerState),

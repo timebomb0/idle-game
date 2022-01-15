@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux';
 import { abbreviateNumber } from 'js-abbreviation-number';
 import { AppState } from '../../state';
 import Texts from '../../texts';
-import { SoldierType, Stat, Text } from '../../types';
-import config from '../../config';
+import { Stat, Text } from '../../types';
 import { getArmyDefenseText, getArmyOffenseText, symbolsTexts } from '../../util';
 
 interface Props {

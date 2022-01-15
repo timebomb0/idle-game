@@ -1,7 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { Page } from '../Layout';
 import { actions, AppState, SoldierState } from '../../state';
 import { getArmyDefense, getArmyOffense } from '../../util';
 import styles from './WarPage.module.scss';

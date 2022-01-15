@@ -1,5 +1,5 @@
 import { Dispatch } from '@reduxjs/toolkit';
-import config from '../../../config';
+import data from '../../../game_data';
 import { actions, SoldierState } from '../../../state';
 import { getArmyDefense, getArmyOffense, randNum } from '../../../util';
 
@@ -18,7 +18,7 @@ export default function ({
 }): void {
 	const armyOffense = getArmyOffense(soldiers) + 1;
 	const armyDefense = getArmyDefense(soldiers) + 1;
-	if (enemyArmyTick >= config.enemyArmyUpdateInterval) {
+	if (enemyArmyTick >= data.war.enemyArmyUpdateInterval) {
 		dispatch(
 			actions.setEnemyArmy({
 				name: 'test',

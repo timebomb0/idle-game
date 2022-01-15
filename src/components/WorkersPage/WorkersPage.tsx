@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Page } from '../Layout';
 import { actions, AppState } from '../../state';
-import config from '../../config';
+import data from '../../game_data';
 import styles from './WorkersPage.module.scss';
 import { GameTooltip } from '../GameTooltip';
 import { WorkerType } from '../../types';
@@ -17,7 +17,7 @@ const WorkersPage: React.FC = (): JSX.Element => {
 			dispatch(actions.addWorker({ amount: 1, type: worker.id }));
 			dispatch(
 				actions.appendMessage({
-					message: `You have hired 1 ${config.workers[worker.id - 1].texts.singular}`,
+					message: `You have hired 1 ${data.workers[worker.id - 1].texts.singular}`,
 				}),
 			);
 		};
@@ -25,7 +25,7 @@ const WorkersPage: React.FC = (): JSX.Element => {
 
 	return (
 		<Page className={styles.WorkersPage}>
-			{config.workers.map((worker) => {
+			{data.workers.map((worker) => {
 				return (
 					<GameTooltip
 						key={worker.id}

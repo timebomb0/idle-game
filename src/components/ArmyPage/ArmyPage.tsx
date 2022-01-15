@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Page } from '../Layout';
 import { actions, AppState } from '../../state';
-import config from '../../config';
 import styles from './ArmyPage.module.scss';
 import { SoldierType } from '../../types';
 import { GameTooltip } from '../GameTooltip';
+import data from '../../game_data';
 
 const ArmyPage: React.FC = (): JSX.Element => {
 	const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const ArmyPage: React.FC = (): JSX.Element => {
 
 	const purchase = (soldier: { id: SoldierType; purchasePrice: number }) => {
 		return () => {
-			const soldierConfig = config.soldiers.find(
+			const soldierConfig = data.soldiers.find(
 				(soldierConfig) => soldierConfig.id === soldier.id,
 			);
 			dispatch(actions.decrementCoins(soldier.purchasePrice));
@@ -31,7 +31,7 @@ const ArmyPage: React.FC = (): JSX.Element => {
 	// TODO Create component displaying current amount, name of item, and purchase price
 	return (
 		<Page className={styles.ArmyPage}>
-			{config.soldiers.map((soldier) => {
+			{data.soldiers.map((soldier) => {
 				return (
 					<GameTooltip
 						key={soldier.id}
