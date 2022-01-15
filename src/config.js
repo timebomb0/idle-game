@@ -2,14 +2,14 @@ import { SoldierType, WorkerType } from './types';
 
 export default {
 	messageLimit: 200,
-	grocerIncrementAmount: 1,
+	peddlerIncrementAmount: 1,
 	enemyArmyUpdateInterval: 5,
 	workers: [
 		{
-			id: WorkerType.Grocer,
+			id: WorkerType.Peddler,
 			texts: {
-				singular: 'Grocer',
-				plural: 'Grocers',
+				singular: 'Peddler',
+				plural: 'Peddlers',
 				description: 'Sells necessities, netting you coins',
 			},
 			purchasePrice: 10,

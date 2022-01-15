@@ -5,9 +5,10 @@ export interface Text {
 	abbr?: string;
 }
 
+// WorkerType and SoldierType must be in same order as they are in the config.js array
 export enum WorkerType {
-	Baker = 1,
-	Grocer = 2,
+	Peddler = 1,
+	Baker = 2,
 	Armourer = 3,
 	Blacksmith = 4,
 }

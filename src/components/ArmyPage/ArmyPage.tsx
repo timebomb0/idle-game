@@ -22,7 +22,7 @@ const ArmyPage: React.FC = (): JSX.Element => {
 			dispatch(actions.addSoldier({ amount: 1, type: soldier.id }));
 			dispatch(
 				actions.appendMessage({
-					message: `You have received 1 ${soldierConfig?.texts.singular}`,
+					message: `You have recruited 1 ${soldierConfig?.texts.singular}`,
 				}),
 			);
 		};

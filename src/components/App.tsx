@@ -10,10 +10,15 @@ import { ExplorePage } from './ExplorePage';
 import { MainStats } from './MainStats';
 import WarPage from './WarPage/WarPage';
 import { StatsPage } from './StatsPage';
+import { getArmyDefense, getArmyOffense } from '../util';
+import { useSelector } from 'react-redux';
+import { AppState } from '../state';
 
 const App: React.FC = (): JSX.Element => {
+	const soldiers = useSelector((state: AppState) => state.army.soldiers);
 	useGameLoop();
 
+	// TODO: Abstract out locking/unlocking link restrictions (e.g. 10 army strength to access War)
 	return (
 		<Router>
 			<div className={styles.AppContainer}>
@@ -23,6 +28,9 @@ const App: React.FC = (): JSX.Element => {
 						<ul className={styles.Menu}>
 							<li>
 								<Link to="/">Explore</Link>
+							</li>
+							<li>
+								<Link to="/shop">Shop</Link>
 							</li>
 							<li>
 								<Link to="/workers">Workers</Link>
@@ -37,7 +45,11 @@ const App: React.FC = (): JSX.Element => {
 								<Link to="/missions">Missions</Link>
 							</li>
 							<li>
-								<Link to="/war">War</Link>
+								{getArmyOffense(soldiers) + getArmyDefense(soldiers) >= 10 ? (
+									<Link to="/war">War</Link>
+								) : (
+									<a className={styles.disabled}>???</a>
+								)}
 							</li>
 							<li>
 								<Link to="/duels">Duels</Link>
@@ -50,6 +62,11 @@ const App: React.FC = (): JSX.Element => {
 							<Switch>
 								<Route exact path="/">
 									<ExplorePage />
+								</Route>
+								<Route exact path="/shop">
+									<Page className="">
+										<></>
+									</Page>
 								</Route>
 								<Route exact path="/workers">
 									<WorkersPage />

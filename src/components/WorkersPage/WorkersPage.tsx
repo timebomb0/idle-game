@@ -15,6 +15,11 @@ const WorkersPage: React.FC = (): JSX.Element => {
 		return () => {
 			dispatch(actions.decrementCoins(worker.purchasePrice));
 			dispatch(actions.addWorker({ amount: 1, type: worker.id }));
+			dispatch(
+				actions.appendMessage({
+					message: `You have hired 1 ${config.workers[worker.id - 1].texts.singular}`,
+				}),
+			);
 		};
 	};
 

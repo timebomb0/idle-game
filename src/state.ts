@@ -34,7 +34,7 @@ export interface WarState {
 	enemyRemainingArmy: ArmyStats;
 }
 export type SoldierState = Record<SoldierType, number>;
-type WorkerState = Record<WorkerType, number>;
+export type WorkerState = Record<WorkerType, number>;
 export type MessageState = MessageItem[];
 
 interface ArmyState {
