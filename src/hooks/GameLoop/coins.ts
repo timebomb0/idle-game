@@ -1,7 +1,7 @@
 import { Dispatch } from '@reduxjs/toolkit';
-import data from '../../../game_data';
-import { actions, WorkerState } from '../../../state';
-import { WorkerType } from '../../../types';
+import data from '../../game_data';
+import { actions, WorkerState } from '../../state';
+import { WorkerType } from '../../types';
 
 export default function ({
 	workers,

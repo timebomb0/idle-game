@@ -1,7 +1,6 @@
 import { combineReducers, configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import data from './game_data';
-import { EnemyArmy, SoldierType, WorkerType } from './types';
-import { getArmyDefense, getArmyOffense } from './util';
+import { Army, SoldierType, WorkerType } from './types';
 
 interface SoldierPayload {
 	amount: number;
@@ -21,24 +20,22 @@ interface MessageItem {
 }
 
 interface UpdateRemainingArmy {
-	yourRemainingArmy: ArmyStats;
-	enemyRemainingArmy: ArmyStats;
+	yourRemainingArmy: Army;
+	enemyRemainingArmy: Army;
 }
 
-type ArmyStats = { offense: number; defense: number };
 export interface WarState {
 	isActive: boolean;
-	yourRemainingArmy: ArmyStats;
-	enemyRemainingArmy: ArmyStats;
+	yourRemainingArmy: Army | Record<string, never>;
+	enemyRemainingArmy: Army | Record<string, never>;
 }
-export type SoldierState = Record<SoldierType, number>;
 export type WorkerState = Record<WorkerType, number>;
 export type MessageState = MessageItem[];
 
 interface ArmyState {
 	war: WarState;
-	soldiers: SoldierState;
-	enemyArmy: EnemyArmy;
+	soldiers: Army;
+	enemyArmy: Army;
 }
 
 const armySlice = createSlice({
@@ -46,28 +43,25 @@ const armySlice = createSlice({
 	initialState: {
 		war: {
 			isActive: false,
-			yourRemainingArmy: { offense: 0, defense: 0 },
-			enemyRemainingArmy: { offense: 0, defense: 0 },
+			yourRemainingArmy: {},
+			enemyRemainingArmy: {},
 		},
 		soldiers: data.soldiers.reduce((result, soldier) => {
 			result[soldier.id] = 0;
 			return result;
-		}, {} as SoldierState),
-		enemyArmy: { name: '', offense: 0, defense: 0 },
+		}, {} as Army),
+		enemyArmy: data.soldiers.reduce((result, soldier) => {
+			result[soldier.id] = 0;
+			return result;
+		}, {} as Army),
 	} as ArmyState,
 	reducers: {
 		startWar: (state) => ({
 			...state,
 			war: {
 				isActive: true,
-				yourRemainingArmy: {
-					offense: getArmyOffense(state.soldiers),
-					defense: getArmyDefense(state.soldiers),
-				},
-				enemyRemainingArmy: {
-					offense: state.enemyArmy.offense,
-					defense: state.enemyArmy.defense,
-				},
+				yourRemainingArmy: state.soldiers,
+				enemyRemainingArmy: state.enemyArmy,
 			},
 		}),
 		stopWar: (state) => {
@@ -75,8 +69,8 @@ const armySlice = createSlice({
 				...state,
 				war: {
 					isActive: false,
-					yourRemainingArmy: { offense: 0, defense: 0 },
-					enemyRemainingArmy: { offense: 0, defense: 0 },
+					yourRemainingArmy: {},
+					enemyRemainingArmy: {},
 				},
 			};
 		},
@@ -90,7 +84,7 @@ const armySlice = createSlice({
 				soldiers: {
 					...state.soldiers,
 					[action.payload.type]:
-						state.soldiers[action.payload.type] + action.payload.amount,
+						(state.soldiers[action.payload.type] as number) + action.payload.amount,
 				},
 			};
 		},
@@ -100,11 +94,11 @@ const armySlice = createSlice({
 				soldiers: {
 					...state.soldiers,
 					[action.payload.type]:
-						state.soldiers[action.payload.type] - action.payload.amount,
+						(state.soldiers[action.payload.type] as number) - action.payload.amount,
 				},
 			};
 		},
-		setEnemyArmy: (state, action: PayloadAction<EnemyArmy>) => ({
+		setEnemyArmy: (state, action: PayloadAction<Army>) => ({
 			...state,
 			enemyArmy: action.payload,
 		}),

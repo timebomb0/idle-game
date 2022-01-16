@@ -41,3 +41,8 @@
 	color: #222;
 	font-weight: 600;
 }
+
+.ArmyDisplay {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}

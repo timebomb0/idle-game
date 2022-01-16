@@ -4,7 +4,7 @@ import { abbreviateNumber } from 'js-abbreviation-number';
 import { AppState } from '../../state';
 import Texts from '../../texts';
 import { Stat, Text } from '../../types';
-import { getArmyDefenseText, getArmyOffenseText, symbolsTexts } from '../../util';
+import { symbolsTexts } from '../../util';
 
 interface Props {
 	stat: Stat;
@@ -22,11 +22,7 @@ const StatDisplay: React.FC<Props> = ({
 	const state = useSelector((state: AppState) => state);
 
 	let val;
-	if (stat === 'armyOffense') {
-		val = getArmyOffenseText(state.army.soldiers);
-	} else if (stat === 'armyDefense') {
-		val = getArmyDefenseText(state.army.soldiers);
-	} else if (stat in state) {
+	if (stat in state) {
 		val = state[stat as keyof AppState];
 	}
 

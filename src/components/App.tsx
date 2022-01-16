@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { ArmyPage } from './ArmyPage';
-import useGameLoop from './hooks/useGameLoop';
+import useGameLoop from '../hooks/useGameLoop';
 import { Page } from './Layout';
 import { WorkersPage } from './WorkersPage';
 import { MessageList } from './MessageList';
@@ -10,7 +10,6 @@ import { ExplorePage } from './ExplorePage';
 import { MainStats } from './MainStats';
 import WarPage from './WarPage/WarPage';
 import { StatsPage } from './StatsPage';
-import { getArmyDefense, getArmyOffense } from '../util';
 import { useSelector } from 'react-redux';
 import { AppState } from '../state';
 
@@ -45,11 +44,8 @@ const App: React.FC = (): JSX.Element => {
 								<Link to="/missions">Missions</Link>
 							</li>
 							<li>
-								{getArmyOffense(soldiers) + getArmyDefense(soldiers) >= 10 ? (
-									<Link to="/war">War</Link>
-								) : (
-									<a className={styles.disabled}>???</a>
-								)}
+								<Link to="/war">War</Link>
+								{/* <a className={styles.disabled}>???</a> */}
 							</li>
 							<li>
 								<Link to="/duels">Duels</Link>

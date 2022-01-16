@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Page } from '../Layout';
 import { AppState, WarState } from '../../state';
 import styles from './WarPage.module.scss';
+import ArmyDisplay from './ArmyDisplay';
 
 const ActiveWar: React.FC = (): JSX.Element => {
 	const war = useSelector<AppState>((state) => state.army.war) as WarState;
@@ -12,16 +13,10 @@ const ActiveWar: React.FC = (): JSX.Element => {
 		<Page className={styles.ActiveWar}>
 			<div>
 				<div className={styles.playerStrength}>
-					Your Remaining Army Offense:{' '}
-					<span>{war.yourRemainingArmy.offense.toLocaleString('en-us')}</span>
-					Your Remaining Army Defense:{' '}
-					<span>{war.yourRemainingArmy.defense.toLocaleString('en-us')}</span>
+					Your army<ArmyDisplay army={war.yourRemainingArmy}></ArmyDisplay>
 				</div>
 				<div className={styles.enemyStrength}>
-					Remaining Enemy Army Offense:{' '}
-					<span>{war.enemyRemainingArmy.offense.toLocaleString('en-us')}</span>
-					Remaining Enemy Army Defense:{' '}
-					<span>{war.enemyRemainingArmy.defense.toLocaleString('en-us')}</span>
+					Enemy army<ArmyDisplay army={war.enemyRemainingArmy}></ArmyDisplay>
 				</div>
 			</div>
 		</Page>

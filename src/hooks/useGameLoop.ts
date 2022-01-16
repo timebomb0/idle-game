@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LOOP_MS } from '../../constants';
-import { actions, AppState } from '../../state';
+import { LOOP_MS } from '../constants';
+import { actions, AppState } from '../state';
 import useInterval from './useInterval';
+import data from '../game_data';
 import { processCoins, processEnemyArmy, processWar } from './GameLoop';
 
 export default (): void => {
@@ -29,7 +30,12 @@ export default (): void => {
 		processCoins({ workers, dispatch });
 
 		if (!war.isActive) {
-			processEnemyArmy({ soldiers, dispatch, enemyArmyTick, setEnemyArmyTick });
+			if (enemyArmyTick >= data.war.enemyArmyUpdateInterval) {
+				processEnemyArmy({ soldiers, dispatch });
+				setEnemyArmyTick(0);
+			} else {
+				setEnemyArmyTick(enemyArmyTick + 1);
+			}
 		}
 
 		if (war.isActive) {

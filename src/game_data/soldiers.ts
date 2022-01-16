@@ -1,6 +1,6 @@
 import { SoldierType } from '../types';
 
-interface SoldierData {
+export interface SoldierData {
 	id: SoldierType;
 	texts: {
 		singular: string;
@@ -9,6 +9,7 @@ interface SoldierData {
 	purchasePrice: number;
 	offense: number;
 	defense: number;
+	health: number;
 }
 
 export default [
@@ -19,8 +20,9 @@ export default [
 			plural: 'Peasants',
 		},
 		purchasePrice: 10,
-		offense: 1,
-		defense: 0,
+		offense: 100,
+		defense: 10,
+		health: 1000,
 	},
 	{
 		id: SoldierType.Infantry,
@@ -29,8 +31,9 @@ export default [
 			plural: 'Infantry',
 		},
 		purchasePrice: 100,
-		offense: 10,
-		defense: 2,
+		offense: 300,
+		defense: 50,
+		health: 1000,
 	},
 	{
 		id: SoldierType.Guardsman,
@@ -39,8 +42,9 @@ export default [
 			plural: 'Guardsmen',
 		},
 		purchasePrice: 500,
-		offense: 10,
-		defense: 20,
+		offense: 200,
+		defense: 80,
+		health: 1000,
 	},
 	{
 		id: SoldierType.Cavalry,
@@ -49,8 +53,9 @@ export default [
 			plural: 'Cavalry',
 		},
 		purchasePrice: 800,
-		offense: 30,
-		defense: 6,
+		offense: 500,
+		defense: 70,
+		health: 1000,
 	},
 	{
 		id: SoldierType.Archer,
@@ -59,8 +64,9 @@ export default [
 			plural: 'Archers',
 		},
 		purchasePrice: 1500,
-		offense: 100,
-		defense: 0,
+		offense: 1000,
+		defense: 20,
+		health: 1000,
 	},
 	{
 		id: SoldierType.Knight,
@@ -69,7 +75,8 @@ export default [
 			plural: 'Knights',
 		},
 		purchasePrice: 3500,
-		offense: 90,
-		defense: 100,
+		offense: 400,
+		defense: 190,
+		health: 1000,
 	},
 ] as SoldierData[];

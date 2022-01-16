@@ -10,7 +10,7 @@ const ExplorePage: React.FC = (): JSX.Element => {
 	const dispatch = useDispatch();
 
 	const getCoin = () => {
-		const gain = randNum(1, 5);
+		const gain = randNum(100, 500);
 		dispatch(actions.incrementCoins(gain));
 		dispatch(actions.appendMessage({ message: `You scavenged ${gain} coins` }));
 	};

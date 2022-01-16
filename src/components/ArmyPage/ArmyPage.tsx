@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { Page } from '../Layout';
 import { actions, AppState } from '../../state';
 import styles from './ArmyPage.module.scss';
@@ -37,8 +36,9 @@ const ArmyPage: React.FC = (): JSX.Element => {
 						key={soldier.id}
 						name={soldier.texts.singular}
 						properties={{
-							'Army Offense': `+${soldier.offense} per 1`,
-							'Army Defense': `+${soldier.defense} per 1`,
+							Offense: soldier.offense.toLocaleString('en-us'),
+							Defense: soldier.defense.toLocaleString('en-us'),
+							Health: soldier.health.toLocaleString('en-us'),
 						}}
 					>
 						<button
