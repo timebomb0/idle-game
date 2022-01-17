@@ -43,11 +43,13 @@
 }
 
 .ArmyDisplay {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-
+	.soldierContainer {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
 	.soldierDisplay {
-		animation-duration: 1.9s;
+		height: 42px;
+		animation-duration: 3.9s;
 		animation-fill-mode: both;
 		&.animating {
 			animation-name: fadeout;
@@ -58,8 +60,10 @@
 @keyframes fadeout {
 	from {
 		opacity: 1;
+		font-size: 16px;
 	}
 	to {
+		font-size: 10px;
 		opacity: 0;
 		transform: none;
 	}

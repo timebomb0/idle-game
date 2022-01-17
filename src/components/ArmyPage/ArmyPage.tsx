@@ -78,8 +78,12 @@ const ArmyPage: React.FC = (): JSX.Element => {
 							name="Autobuy"
 							description={
 								<>
-									30% chance every tick to autobuy 1 {soldier.texts.singular} if
-									you have the coins
+									30% chance every tick to autobuy{' '}
+									{autobuyPower.inUse[soldier.id] || 0}{' '}
+									{autobuyPower.inUse[soldier.id] !== 1
+										? soldier.texts.plural
+										: soldier.texts.singular}{' '}
+									if you have the coins
 									<br />
 									Must have autobuy power.
 								</>

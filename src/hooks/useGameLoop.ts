@@ -10,6 +10,7 @@ export default (): void => {
 	const dispatch = useDispatch();
 	const [loopInterval, setLoopInterval] = useState(0);
 	const [enemyArmyTick, setEnemyArmyTick] = useState(0);
+	const [warTick, setWarTick] = useState(0);
 	const soldiers = useSelector((state: AppState) => state.army.soldiers);
 	const workers = useSelector((state: AppState) => state.workers);
 	const war = useSelector((state: AppState) => state.army.war);
@@ -41,8 +42,11 @@ export default (): void => {
 			}
 		}
 
-		if (war.isActive) {
+		if (war.isActive && warTick >= data.war.warUpdateInterval) {
 			processWar({ war, dispatch });
+			setWarTick(0);
+		} else {
+			setWarTick(warTick + 1);
 		}
 	};
 };

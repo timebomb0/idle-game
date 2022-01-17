@@ -45,13 +45,21 @@ const App: React.FC = (): JSX.Element => {
 							</li>
 							<li>
 								<Link to="/war">War</Link>
-								{/* <a className={styles.disabled}>???</a> */}
 							</li>
 							<li>
 								<Link to="/duels">Duels</Link>
 							</li>
 							<li>
 								<Link to="/stats">Stats</Link>
+							</li>
+							<li>
+								<a className={styles.disabled}>???</a>
+							</li>
+							<li>
+								<a className={styles.disabled}>???</a>
+							</li>
+							<li>
+								<a className={styles.disabled}>???</a>
 							</li>
 						</ul>
 						<div className={styles.Content}>

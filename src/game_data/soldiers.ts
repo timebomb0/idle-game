@@ -42,8 +42,8 @@ export default [
 			plural: 'Guardsmen',
 		},
 		purchasePrice: 150,
-		offense: 40,
-		defense: 80,
+		offense: 20,
+		defense: 70,
 		health: 600,
 	},
 	{
@@ -54,7 +54,7 @@ export default [
 		},
 		purchasePrice: 200,
 		offense: 140,
-		defense: 50,
+		defense: 40,
 		health: 500,
 	},
 	{
@@ -76,7 +76,7 @@ export default [
 		},
 		purchasePrice: 400,
 		offense: 180,
-		defense: 90,
+		defense: 80,
 		health: 700,
 	},
 ] as SoldierData[];

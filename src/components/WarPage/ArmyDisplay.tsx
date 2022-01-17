@@ -9,11 +9,12 @@ import { ProgressBar } from '../ProgressBar';
 interface Props {
 	army: Army;
 	armyMaxHealth?: number;
+	armyColor?: string;
 	isAnimated: boolean;
 }
 // eslint-disable-next-line react/display-name
 const ArmyDisplay: React.FC<Props> = React.memo(
-	({ army, armyMaxHealth, isAnimated }: Props): JSX.Element => {
+	({ army, armyMaxHealth, armyColor, isAnimated }: Props): JSX.Element => {
 		const [prevArmy, setPrevArmy] = useState(army);
 		const [killedSoldierTypes, setKilledSoldierTypes] = useState([] as SoldierType[]);
 
@@ -50,48 +51,51 @@ const ArmyDisplay: React.FC<Props> = React.memo(
 					<>
 						{' '}
 						<ProgressBar
+							color={armyColor}
 							progress={Math.min(
 								100,
-								Math.floor((armyRemainingHealth / armyMaxHealth) * 100) + 1,
+								Math.floor((armyRemainingHealth / (armyMaxHealth || 0)) * 100) + 1,
 							)}
 						/>
 						<br />
 					</>
 				) : null}
-				{Object.keys(army)
-					.filter((soldierKey) => {
-						const soldierType = (soldierKey as unknown) as SoldierType;
-						return (
-							Number(army[soldierType]) > 0 ||
-							killedSoldierTypes.includes(soldierType)
-						);
-					})
-					.map((soldier) => {
-						const soldierType = (soldier as unknown) as SoldierType;
-						const isSoldierKilled = (army[soldierType] || 0) <= 0;
+				<div className={styles.soldierContainer}>
+					{Object.keys(army)
+						.filter((soldierKey) => {
+							const soldierType = (soldierKey as unknown) as SoldierType;
+							return (
+								Number(army[soldierType]) > 0 ||
+								killedSoldierTypes.includes(soldierType)
+							);
+						})
+						.map((soldier) => {
+							const soldierType = (soldier as unknown) as SoldierType;
+							const isSoldierKilled = (army[soldierType] || 0) <= 0;
 
-						return isAnimated ? (
-							<div
-								key={soldier}
-								className={cls(styles.soldierDisplay, {
-									[styles.animating]: isSoldierKilled,
-								})}
-							>
-								{`${data.soldiers[soldierType].texts.plural}: `}
-								{isAnimated ? (
-									<AnimatedText className={styles.SoldierText}>
-										{army[soldierType]}
-									</AnimatedText>
-								) : (
-									army[soldierType]
-								)}
-							</div>
-						) : (
-							<div key={soldier}>
-								{`${data.soldiers[soldierType].texts.plural}: ${army[soldierType]}`}
-							</div>
-						);
-					})}
+							return isAnimated ? (
+								<div
+									key={soldier}
+									className={cls(styles.soldierDisplay, {
+										[styles.animating]: isSoldierKilled,
+									})}
+								>
+									{`${data.soldiers[soldierType].texts.plural}: `}
+									{isAnimated ? (
+										<AnimatedText className={styles.SoldierText}>
+											{army[soldierType]}
+										</AnimatedText>
+									) : (
+										army[soldierType]
+									)}
+								</div>
+							) : (
+								<div key={soldier}>
+									{`${data.soldiers[soldierType].texts.plural}: ${army[soldierType]}`}
+								</div>
+							);
+						})}
+				</div>
 			</div>
 		);
 	},

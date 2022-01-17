@@ -36,11 +36,12 @@ const ActiveWar: React.FC = (): JSX.Element => {
 		<Page className={styles.ActiveWar}>
 			<div>
 				<div className={styles.playerStrength}>
-					Your army
+					<span style={{ color: '#0000E0' }}>Your army</span>
 					{yourSoldiersRemaining > 0 ? (
 						<ArmyDisplay
 							isAnimated={true}
 							armyMaxHealth={yourArmyMaxHealth}
+							armyColor="#0000E0"
 							army={war.you.soldiers}
 						></ArmyDisplay>
 					) : (
@@ -52,11 +53,13 @@ const ActiveWar: React.FC = (): JSX.Element => {
 					)}
 				</div>
 				<div className={styles.enemyStrength}>
-					Enemy army
+					<span style={{ color: '#E00000' }}>Enemy army</span>
+
 					{enemySoldiersRemaining ? (
 						<ArmyDisplay
 							isAnimated={true}
 							armyMaxHealth={enemyArmyMaxHealth}
+							armyColor="#E00000"
 							army={war.enemy.soldiers}
 						></ArmyDisplay>
 					) : (
