@@ -104,7 +104,6 @@ function getUpdatedArmy({
 }): WarringArmy {
 	const updatedArmy = { ...army.soldiers };
 	const updatedHealths = { ...army.soldierHealths };
-	console.log(army, damageReceived);
 	Object.entries(damageReceived).forEach(([soldierKey, damageAmount]) => {
 		const soldierType = (soldierKey as unknown) as SoldierType;
 		damageAmount = (damageAmount || 0) + (army.soldierHealths[soldierType] || 0);

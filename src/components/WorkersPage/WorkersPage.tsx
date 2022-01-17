@@ -15,7 +15,6 @@ const WorkersPage: React.FC = (): JSX.Element => {
 		return () => {
 			dispatch(actions.decrementCoins(worker.purchasePrice));
 			if (worker.id === WorkerType.Recruiter) {
-				console.log('dispatched setting autobuy power to', workers[WorkerType.Recruiter]);
 				dispatch(actions.setAutobuyPower(workers[WorkerType.Recruiter] + 1));
 			}
 			dispatch(actions.addWorker({ amount: 1, type: worker.id }));

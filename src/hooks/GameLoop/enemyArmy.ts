@@ -10,7 +10,7 @@ export default function ({ soldiers, dispatch }: { soldiers: Army; dispatch: Dis
 	const yourArmyValue = getArmyValue(soldiers);
 	let enemyArmyValue = 0;
 	const enemyArmy: Army | Record<string, never> = {};
-	const targetEnemyArmyValue = randNum(0.7 * yourArmyValue, 1.2 * yourArmyValue);
+	const targetEnemyArmyValue = randNum(0.75 * yourArmyValue, 1.2 * yourArmyValue);
 
 	while (enemyArmyValue < targetEnemyArmyValue) {
 		// get random soldier that doesn't put us over target enemy army value

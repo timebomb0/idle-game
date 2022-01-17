@@ -2,6 +2,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 import data from '../../game_data';
 import { actions } from '../../state';
 import { SoldierType } from '../../types';
+import { randNum } from '../../util';
 
 export default function ({
 	autobuyers,
@@ -16,7 +17,8 @@ export default function ({
 	Object.keys(autobuyers).forEach((soldierKey) => {
 		const soldierType = (soldierKey as unknown) as SoldierType;
 		const purchasePrice = data.soldiers[soldierType].purchasePrice;
-		if (autobuyers[soldierType] > 0 && coins >= purchasePrice) {
+		// if can autobuy, 30% chance to autobuy per tick
+		if (autobuyers[soldierType] > 0 && coins >= purchasePrice && randNum(1, 10) <= 3) {
 			const maxPurchaseQuantity = Math.floor(coins / purchasePrice);
 			const purchaseQuantity = Math.min(maxPurchaseQuantity, autobuyers[soldierType]);
 			coins -= purchaseQuantity * purchasePrice;

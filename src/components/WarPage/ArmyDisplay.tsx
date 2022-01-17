@@ -4,14 +4,16 @@ import data from '../../game_data';
 import { Army, SoldierType } from '../../types';
 import AnimatedText from '../AnimatedText';
 import styles from './WarPage.module.scss';
+import { ProgressBar } from '../ProgressBar';
 
 interface Props {
 	army: Army;
+	armyMaxHealth?: number;
 	isAnimated: boolean;
 }
 // eslint-disable-next-line react/display-name
 const ArmyDisplay: React.FC<Props> = React.memo(
-	({ army, isAnimated }: Props): JSX.Element => {
+	({ army, armyMaxHealth, isAnimated }: Props): JSX.Element => {
 		const [prevArmy, setPrevArmy] = useState(army);
 		const [killedSoldierTypes, setKilledSoldierTypes] = useState([] as SoldierType[]);
 
@@ -34,8 +36,28 @@ const ArmyDisplay: React.FC<Props> = React.memo(
 			}
 		}, [army, prevArmy, setPrevArmy, killedSoldierTypes, setKilledSoldierTypes]);
 
+		const armyRemainingHealth = Object.entries(army).reduce(
+			(totalHealth, [soldierKey, soldierCount]) => {
+				const soldierType = (soldierKey as unknown) as SoldierType;
+				return totalHealth + data.soldiers[soldierType].health * (soldierCount || 0);
+			},
+			0,
+		);
+
 		return (
 			<div className={styles.ArmyDisplay}>
+				{armyMaxHealth ? (
+					<>
+						{' '}
+						<ProgressBar
+							progress={Math.min(
+								100,
+								Math.floor((armyRemainingHealth / armyMaxHealth) * 100) + 1,
+							)}
+						/>
+						<br />
+					</>
+				) : null}
 				{Object.keys(army)
 					.filter((soldierKey) => {
 						const soldierType = (soldierKey as unknown) as SoldierType;
