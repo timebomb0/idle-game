@@ -16,10 +16,10 @@ const StartWar: React.FC = (): JSX.Element => {
 	return (
 		<div>
 			<div className={styles.playerStrength}>
-				Your army<ArmyDisplay army={soldiers}></ArmyDisplay>
+				Your army<ArmyDisplay isAnimated={false} army={soldiers}></ArmyDisplay>
 			</div>
 			<div className={styles.enemyStrength}>
-				Enemy army<ArmyDisplay army={enemyArmy}></ArmyDisplay>
+				Enemy army<ArmyDisplay isAnimated={false} army={enemyArmy}></ArmyDisplay>
 			</div>
 			<button className={styles.fightBtn} onClick={fight}>
 				Fight

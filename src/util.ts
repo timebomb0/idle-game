@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { abbreviateNumber } from 'js-abbreviation-number';
 import data from './game_data';
 import { Army, SoldierType } from './types';
 

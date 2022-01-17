@@ -117,7 +117,6 @@ function getUpdatedArmy({
 		updatedHealths[soldierType] = soldierRemainingHealth;
 	});
 
-	console.log('updated army', updatedArmy, updatedHealths);
 	return {
 		soldiers: updatedArmy,
 		soldierHealths: updatedHealths,
