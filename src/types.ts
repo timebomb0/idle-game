@@ -8,9 +8,7 @@ export interface Text {
 // WorkerType and SoldierType must be in same order as they are in the config.js array
 export enum WorkerType {
 	Peddler,
-	Baker,
-	Armourer,
-	Blacksmith,
+	Recruiter,
 }
 
 export enum SoldierType {

@@ -15,35 +15,17 @@ export default [
 		texts: {
 			singular: 'Peddler',
 			plural: 'Peddlers',
-			description: 'Sells necessities, netting you coins',
+			description: 'Sells necessities, netting you coins.',
 		},
 		purchasePrice: 10,
 	},
 	{
-		id: WorkerType.Baker,
+		id: WorkerType.Recruiter,
 		texts: {
-			singular: 'Baker',
-			plural: 'Bakers',
-			description: 'Feeds your soldiers, increasing their morale',
+			singular: 'Recruiter',
+			plural: 'Recruiters',
+			description: 'Hires new soldiers for you. Must be configured using autobuy power.',
 		},
-		purchasePrice: 10,
-	},
-	{
-		id: WorkerType.Armourer,
-		texts: {
-			singular: 'Armourer',
-			plural: 'Armourers',
-			description: 'Crafts armor for your soldiers, increasing their defense',
-		},
-		purchasePrice: 10,
-	},
-	{
-		id: WorkerType.Blacksmith,
-		texts: {
-			singular: 'Blacksmith',
-			plural: 'Blacksmiths',
-			description: 'Forges weapons for your soldiers, increasing their attack',
-		},
-		purchasePrice: 10,
+		purchasePrice: 100,
 	},
 ] as WorkerData[];

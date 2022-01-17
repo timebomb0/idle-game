@@ -20,9 +20,9 @@ export default [
 			plural: 'Peasants',
 		},
 		purchasePrice: 10,
-		offense: 100,
-		defense: 10,
-		health: 100,
+		offense: 5,
+		defense: 1,
+		health: 50,
 	},
 	{
 		id: SoldierType.Infantry,

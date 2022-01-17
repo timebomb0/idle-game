@@ -84,7 +84,7 @@ function processSoldierAttack({
 			(100 / (100 + data.soldiers[randDefenderSoldierType].defense)),
 	);
 	defenderDamageReceived[randDefenderSoldierType] =
-		defenderDamageReceived[randDefenderSoldierType] || 0 + damageDealt;
+		(defenderDamageReceived[randDefenderSoldierType] || 0) + damageDealt;
 	if (
 		Number(defenderDamageReceived[randDefenderSoldierType]) >=
 		Number(defenderMaxDamageReceived[randDefenderSoldierType])
@@ -104,6 +104,7 @@ function getUpdatedArmy({
 }): WarringArmy {
 	const updatedArmy = { ...army.soldiers };
 	const updatedHealths = { ...army.soldierHealths };
+	console.log(army, damageReceived);
 	Object.entries(damageReceived).forEach(([soldierKey, damageAmount]) => {
 		const soldierType = (soldierKey as unknown) as SoldierType;
 		damageAmount = (damageAmount || 0) + (army.soldierHealths[soldierType] || 0);
@@ -125,7 +126,7 @@ function getUpdatedArmy({
 
 function flattenSoldiers(soldiers: Army): SoldierType[] {
 	return Object.entries(soldiers).reduce((soldiers, [soldierKey, soldierCount]) => {
-		return soldierCount || 0 > 0
+		return (soldierCount || 0) > 0
 			? soldiers.concat(
 					(Array(soldierCount) as SoldierType[]).fill(
 						(soldierKey as unknown) as SoldierType,
@@ -154,7 +155,7 @@ function getMaxDamageReceived(soldiers: Army): Army {
 function getLivingSoldierTypes(soldiers: Army): SoldierType[] {
 	return Object.keys(soldiers).reduce((soldierTypes, soldierKey) => {
 		const soldierType = (soldierKey as unknown) as SoldierType;
-		if (soldiers[soldierType] || 0 > 0) {
+		if ((soldiers[soldierType] || 0) > 0) {
 			soldierTypes.push(soldierType);
 		}
 		return soldierTypes;

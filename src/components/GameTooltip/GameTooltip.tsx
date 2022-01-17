@@ -8,7 +8,7 @@ interface Props {
 	className?: string;
 	children: React.ReactElement;
 	name?: string;
-	description?: string;
+	description?: React.ReactElement | string;
 	properties?: Record<string, string>;
 }
 

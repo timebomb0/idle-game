@@ -5,5 +5,16 @@
 	}
 	button {
 		border-bottom: 3px solid #730;
+		height: 43px;
 	}
+}
+
+.purchaseRow {
+	display: grid;
+	grid-template-columns: 10fr 2fr;
+}
+
+.autobuyBtn {
+	background-color: #0077d0 !important;
+	font-size: 12px;
 }

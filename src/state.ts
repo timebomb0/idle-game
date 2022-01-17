@@ -43,6 +43,11 @@ interface ArmyState {
 	enemyArmy: Army;
 }
 
+interface AutobuyPower {
+	total: number;
+	inUse: Record<SoldierType, number>;
+}
+
 const armySlice = createSlice({
 	name: 'army',
 	initialState: {
@@ -131,6 +136,24 @@ const coinsSlice = createSlice({
 	},
 });
 
+const autobuyPowerSlice = createSlice({
+	name: 'autobuyPower',
+	initialState: {
+		total: 0,
+		inUse: {},
+	} as AutobuyPower,
+	reducers: {
+		updateInUse: (state, action: PayloadAction<Partial<Record<SoldierType, number>>>) => ({
+			...state,
+			inUse: { ...state.inUse, ...action.payload },
+		}),
+		setAutobuyPower: (state, action: PayloadAction<number>) => ({
+			...state,
+			total: action.payload,
+		}),
+	},
+});
+
 const reputationSlice = createSlice({
 	name: 'reputation',
 	initialState: 0,
@@ -192,6 +215,7 @@ const reducer = combineReducers({
 	tick: tickSlice.reducer,
 	reputation: reputationSlice.reducer,
 	army: armySlice.reducer,
+	autobuyPower: autobuyPowerSlice.reducer,
 });
 export type AppState = ReturnType<typeof reducer>;
 export const appStore = configureStore({
@@ -204,4 +228,5 @@ export const actions = {
 	...tickSlice.actions,
 	...reputationSlice.actions,
 	...armySlice.actions,
+	...autobuyPowerSlice.actions,
 };
