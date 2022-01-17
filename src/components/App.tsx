@@ -12,10 +12,12 @@ import WarPage from './WarPage/WarPage';
 import { StatsPage } from './StatsPage';
 import { useSelector } from 'react-redux';
 import { AppState } from '../state';
+import useKeyModifiers from '../hooks/useKeyModifiers';
 
 const App: React.FC = (): JSX.Element => {
 	const soldiers = useSelector((state: AppState) => state.army.soldiers);
 	useGameLoop();
+	useKeyModifiers();
 
 	// TODO: Abstract out locking/unlocking link restrictions (e.g. 10 army strength to access War)
 	return (

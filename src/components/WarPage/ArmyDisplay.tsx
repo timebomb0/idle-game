@@ -51,6 +51,7 @@ const ArmyDisplay: React.FC<Props> = React.memo(
 					<>
 						{' '}
 						<ProgressBar
+							isAnimated={isAnimated}
 							color={armyColor}
 							progress={Math.min(
 								100,

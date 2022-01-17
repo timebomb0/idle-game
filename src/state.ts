@@ -43,6 +43,11 @@ export interface ArmyState {
 	enemyArmy: Army;
 }
 
+export interface KeyModifierState {
+	ctrlKey: boolean;
+	shiftKey: boolean;
+}
+
 interface AutobuyPower {
 	total: number;
 	inUse: Record<SoldierType, number>;
@@ -163,6 +168,21 @@ const reputationSlice = createSlice({
 	},
 });
 
+const keyModifierSlice = createSlice({
+	name: 'keyModifier',
+	initialState: { ctrlKey: false, shiftKey: false } as KeyModifierState,
+	reducers: {
+		setCtrlKey: (state, action: PayloadAction<boolean>) => ({
+			...state,
+			ctrlKey: action.payload,
+		}),
+		setShiftKey: (state, action: PayloadAction<boolean>) => ({
+			...state,
+			shiftKey: action.payload,
+		}),
+	},
+});
+
 const workersSlice = createSlice({
 	name: 'workers',
 	initialState: data.workers.reduce((result, soldier) => {
@@ -216,6 +236,7 @@ const reducer = combineReducers({
 	reputation: reputationSlice.reducer,
 	army: armySlice.reducer,
 	autobuyPower: autobuyPowerSlice.reducer,
+	keyModifier: keyModifierSlice.reducer,
 });
 export type AppState = ReturnType<typeof reducer>;
 export const appStore = configureStore({
@@ -229,4 +250,5 @@ export const actions = {
 	...reputationSlice.actions,
 	...armySlice.actions,
 	...autobuyPowerSlice.actions,
+	...keyModifierSlice.actions,
 };
