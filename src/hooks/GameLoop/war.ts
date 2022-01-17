@@ -1,26 +1,20 @@
 import { actions, WarState } from '../../state';
 import { Dispatch } from '@reduxjs/toolkit';
-import { flattenObj, randNum } from '../../util';
 import { Army, SoldierType } from '../../types';
+import { WarringArmy } from '../../state';
 import data from '../../game_data';
-import { ObjectFlags } from 'typescript';
-import { SoldierData } from '../../game_data/soldiers';
 
-// TODO: Improve dmg algorithm, need to have it scale so it can handle very high atk and defense
-//       alternatively could implement new army health stat, may be easier algorithm-wise
-//       Should also always have chance to do minimum 2 damage [when numbers get low enough dmg is always 1 right now]
-//       ...May be best and most interesting to do a more complex battle logic
-//       that pits every individual soldier in each army vs one-another with some simple AI
-//       killing off soldiers during the war as they take eachother's lives
+// TODO: Verify dmg algorithm, make sure it can scale so it can handle very high atk and defense
+// TODO: Reset enemy army after the war, create UI state so if no enemy army is set it displays something
 export default function ({ war, dispatch }: { war: WarState; dispatch: Dispatch }): void {
-	const yourSoldiers = flattenSoldiers(war.yourRemainingArmy);
-	const yourDamageReceived = getDamageReceived(war.yourRemainingArmy);
-	const yourMaxDamageReceived = getMaxDamageReceived(war.yourRemainingArmy);
-	const yourLivingSoldierTypes = getLivingSoldierTypes(war.yourRemainingArmy);
-	const enemySoldiers = flattenSoldiers(war.enemyRemainingArmy);
-	const enemyDamageReceived = getDamageReceived(war.enemyRemainingArmy);
-	const enemyMaxDamageReceived = getMaxDamageReceived(war.enemyRemainingArmy);
-	const enemyLivingSoldierTypes = getLivingSoldierTypes(war.enemyRemainingArmy);
+	const yourSoldiers = flattenSoldiers(war.you.soldiers);
+	const yourDamageReceived = getDamageReceived(war.you.soldiers);
+	const yourMaxDamageReceived = getMaxDamageReceived(war.you.soldiers);
+	const yourLivingSoldierTypes = getLivingSoldierTypes(war.you.soldiers);
+	const enemySoldiers = flattenSoldiers(war.enemy.soldiers);
+	const enemyDamageReceived = getDamageReceived(war.enemy.soldiers);
+	const enemyMaxDamageReceived = getMaxDamageReceived(war.enemy.soldiers);
+	const enemyLivingSoldierTypes = getLivingSoldierTypes(war.enemy.soldiers);
 
 	yourSoldiers.forEach((yourSoldierType) => {
 		if (enemyLivingSoldierTypes.length > 0)
@@ -45,11 +39,11 @@ export default function ({ war, dispatch }: { war: WarState; dispatch: Dispatch 
 	dispatch(
 		actions.updateRemainingArmy({
 			yourRemainingArmy: getUpdatedArmy({
-				army: war.yourRemainingArmy,
+				army: war.you,
 				damageReceived: yourDamageReceived,
 			}),
 			enemyRemainingArmy: getUpdatedArmy({
-				army: war.enemyRemainingArmy,
+				army: war.enemy,
 				damageReceived: enemyDamageReceived,
 			}),
 		}),
@@ -68,33 +62,6 @@ export default function ({ war, dispatch }: { war: WarState; dispatch: Dispatch 
 		dispatch(actions.appendMessage({ message: 'You have lost the war' }));
 		dispatch(actions.stopWar());
 	}
-	// todo: take dmg received and lower soldier counts in war state
-
-	// TODO: Copy above logic for enemy soldier to attack
-	// for (let e = 0; e < enemySoldierCount * 0.1; e++) {}
-
-	// TODO: After damage calculated for enemy and your army, deal damage by killing things [subtracting quantities alive]
-	//       and updating health bar [e.g. if remaining attack didn't finish off a unit]
-
-	// idea:
-	// a random 10% of your soldiers attack a random 10% of enemy's soldiers
-	// alternate 1 of your soldier to 1 of enemy soldier until all 10% have attacked
-	// for health, have 1 health bar for each soldier type and just lower that health bar, when it hits 0 kill 1 of the soldiers
-
-	// for reference use these actions:
-	// dispatch(actions.updateRemainingArmy(updatedArmyStats));
-	// 	dispatch(
-	// 		actions.appendMessage({
-	// 			message: `You have won the war and gained ${repGainAmount} reputation`,
-	// 		}),
-	// 	);
-	// 	dispatch(actions.stopWar());
-	// 	dispatch(actions.incrementReputation(repGainAmount));
-	// 	// TODO: add won war logic/rewards
-	// } else if (
-	// 	dispatch(actions.appendMessage({ message: 'You have lost the war' }));
-	// 	dispatch(actions.stopWar());
-	// 	// TODO: add lost war logic/rewards
 }
 
 function processSoldierAttack({
@@ -105,8 +72,8 @@ function processSoldierAttack({
 }: {
 	attackerSoldierType: SoldierType;
 	defenderLivingSoldierTypes: SoldierType[];
-	defenderDamageReceived: Record<SoldierType, number>;
-	defenderMaxDamageReceived: Record<SoldierType, number>;
+	defenderDamageReceived: Army;
+	defenderMaxDamageReceived: Army;
 }) {
 	// your soldier damages a random enemy soldier
 	const randDefenderSoldierType =
@@ -116,10 +83,11 @@ function processSoldierAttack({
 		data.soldiers[attackerSoldierType].offense *
 			(100 / (100 + data.soldiers[randDefenderSoldierType].defense)),
 	);
-	defenderDamageReceived[randDefenderSoldierType] += damageDealt;
+	defenderDamageReceived[randDefenderSoldierType] =
+		defenderDamageReceived[randDefenderSoldierType] || 0 + damageDealt;
 	if (
-		defenderDamageReceived[randDefenderSoldierType] >=
-		defenderMaxDamageReceived[randDefenderSoldierType]
+		Number(defenderDamageReceived[randDefenderSoldierType]) >=
+		Number(defenderMaxDamageReceived[randDefenderSoldierType])
 	)
 		defenderLivingSoldierTypes.splice(
 			defenderLivingSoldierTypes.indexOf(randDefenderSoldierType),
@@ -131,24 +99,33 @@ function getUpdatedArmy({
 	army,
 	damageReceived,
 }: {
-	army: Army;
-	damageReceived: Record<SoldierType, number>;
-}): Army {
-	const updatedArmy = { ...army };
+	army: WarringArmy;
+	damageReceived: Army;
+}): WarringArmy {
+	const updatedArmy = { ...army.soldiers };
+	const updatedHealths = { ...army.soldierHealths };
 	Object.entries(damageReceived).forEach(([soldierKey, damageAmount]) => {
 		const soldierType = (soldierKey as unknown) as SoldierType;
+		damageAmount = (damageAmount || 0) + (army.soldierHealths[soldierType] || 0);
+		const soldierRemainingHealth = Math.round(damageAmount % data.soldiers[soldierType].health);
+
 		updatedArmy[soldierType] = Math.max(
 			0,
 			(updatedArmy[soldierType] || 0) -
 				Math.floor(damageAmount / data.soldiers[soldierType].health),
 		);
+		updatedHealths[soldierType] = soldierRemainingHealth;
 	});
 
-	return updatedArmy;
+	console.log('updated army', updatedArmy, updatedHealths);
+	return {
+		soldiers: updatedArmy,
+		soldierHealths: updatedHealths,
+	};
 }
 
-function flattenSoldiers(army: Army): SoldierType[] {
-	return Object.entries(army).reduce((soldiers, [soldierKey, soldierCount]) => {
+function flattenSoldiers(soldiers: Army): SoldierType[] {
+	return Object.entries(soldiers).reduce((soldiers, [soldierKey, soldierCount]) => {
 		return soldierCount || 0 > 0
 			? soldiers.concat(
 					(Array(soldierCount) as SoldierType[]).fill(
@@ -159,26 +136,26 @@ function flattenSoldiers(army: Army): SoldierType[] {
 	}, [] as SoldierType[]);
 }
 
-function getDamageReceived(army: Army) {
-	return Object.keys(army).reduce((newObj, soldierKey) => {
+function getDamageReceived(soldiers: Army): Army {
+	return Object.keys(soldiers).reduce((newObj, soldierKey) => {
 		newObj[(soldierKey as unknown) as SoldierType] = 0;
 		return newObj;
-	}, {} as Record<SoldierType, number>);
+	}, {} as Army);
 }
 
-function getMaxDamageReceived(army: Army) {
-	return Object.keys(army).reduce((newObj, soldierKey) => {
+function getMaxDamageReceived(soldiers: Army): Army {
+	return Object.keys(soldiers).reduce((newObj, soldierKey) => {
 		const soldierType = (soldierKey as unknown) as SoldierType;
-		const soldierQuantity: number = army[soldierType] || 0;
+		const soldierQuantity: number = soldiers[soldierType] || 0;
 		newObj[soldierType] = data.soldiers[soldierType].health * soldierQuantity;
 		return newObj;
-	}, {} as Record<SoldierType, number>);
+	}, {} as Army);
 }
 
-function getLivingSoldierTypes(army: Army) {
-	return Object.keys(army).reduce((soldierTypes, soldierKey) => {
+function getLivingSoldierTypes(soldiers: Army): SoldierType[] {
+	return Object.keys(soldiers).reduce((soldierTypes, soldierKey) => {
 		const soldierType = (soldierKey as unknown) as SoldierType;
-		if (army[soldierType] || 0 > 0) {
+		if (soldiers[soldierType] || 0 > 0) {
 			soldierTypes.push(soldierType);
 		}
 		return soldierTypes;

@@ -22,7 +22,7 @@ export default [
 		purchasePrice: 10,
 		offense: 100,
 		defense: 10,
-		health: 1000,
+		health: 100,
 	},
 	{
 		id: SoldierType.Infantry,
@@ -33,7 +33,7 @@ export default [
 		purchasePrice: 100,
 		offense: 300,
 		defense: 50,
-		health: 1000,
+		health: 300,
 	},
 	{
 		id: SoldierType.Guardsman,
@@ -44,7 +44,7 @@ export default [
 		purchasePrice: 500,
 		offense: 200,
 		defense: 80,
-		health: 1000,
+		health: 500,
 	},
 	{
 		id: SoldierType.Cavalry,
@@ -55,7 +55,7 @@ export default [
 		purchasePrice: 800,
 		offense: 500,
 		defense: 70,
-		health: 1000,
+		health: 300,
 	},
 	{
 		id: SoldierType.Archer,
@@ -66,7 +66,7 @@ export default [
 		purchasePrice: 1500,
 		offense: 1000,
 		defense: 20,
-		health: 1000,
+		health: 200,
 	},
 	{
 		id: SoldierType.Knight,
@@ -76,7 +76,7 @@ export default [
 		},
 		purchasePrice: 3500,
 		offense: 400,
-		defense: 190,
-		health: 1000,
+		defense: 100,
+		health: 600,
 	},
 ] as SoldierData[];

@@ -13,10 +13,10 @@ const ActiveWar: React.FC = (): JSX.Element => {
 		<Page className={styles.ActiveWar}>
 			<div>
 				<div className={styles.playerStrength}>
-					Your army<ArmyDisplay army={war.yourRemainingArmy}></ArmyDisplay>
+					Your army<ArmyDisplay army={war.you.soldiers}></ArmyDisplay>
 				</div>
 				<div className={styles.enemyStrength}>
-					Enemy army<ArmyDisplay army={war.enemyRemainingArmy}></ArmyDisplay>
+					Enemy army<ArmyDisplay army={war.enemy.soldiers}></ArmyDisplay>
 				</div>
 			</div>
 		</Page>

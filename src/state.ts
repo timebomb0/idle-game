@@ -20,14 +20,19 @@ interface MessageItem {
 }
 
 interface UpdateRemainingArmy {
-	yourRemainingArmy: Army;
-	enemyRemainingArmy: Army;
+	yourRemainingArmy: WarringArmy;
+	enemyRemainingArmy: WarringArmy;
+}
+
+export interface WarringArmy {
+	soldierHealths: Army | Record<string, never>;
+	soldiers: Army | Record<string, never>;
 }
 
 export interface WarState {
 	isActive: boolean;
-	yourRemainingArmy: Army | Record<string, never>;
-	enemyRemainingArmy: Army | Record<string, never>;
+	you: WarringArmy;
+	enemy: WarringArmy;
 }
 export type WorkerState = Record<WorkerType, number>;
 export type MessageState = MessageItem[];
@@ -43,8 +48,8 @@ const armySlice = createSlice({
 	initialState: {
 		war: {
 			isActive: false,
-			yourRemainingArmy: {},
-			enemyRemainingArmy: {},
+			you: { soldierHealths: {}, soldiers: {} },
+			enemy: { soldierHealths: {}, soldiers: {} },
 		},
 		soldiers: data.soldiers.reduce((result, soldier) => {
 			result[soldier.id] = 0;
@@ -60,8 +65,8 @@ const armySlice = createSlice({
 			...state,
 			war: {
 				isActive: true,
-				yourRemainingArmy: state.soldiers,
-				enemyRemainingArmy: state.enemyArmy,
+				you: { soldierHealths: {}, soldiers: state.soldiers },
+				enemy: { soldierHealths: {}, soldiers: state.enemyArmy },
 			},
 		}),
 		stopWar: (state) => {
@@ -69,14 +74,18 @@ const armySlice = createSlice({
 				...state,
 				war: {
 					isActive: false,
-					yourRemainingArmy: {},
-					enemyRemainingArmy: {},
+					you: { soldierHealths: {}, soldiers: {} },
+					enemy: { soldierHealths: {}, soldiers: {} },
 				},
 			};
 		},
 		updateRemainingArmy: (state, action: PayloadAction<UpdateRemainingArmy>) => ({
 			...state,
-			war: { ...state.war, ...action.payload },
+			war: {
+				...state.war,
+				you: action.payload.yourRemainingArmy,
+				enemy: action.payload.enemyRemainingArmy,
+			},
 		}),
 		addSoldier: (state, action: PayloadAction<SoldierPayload>) => {
 			return {
