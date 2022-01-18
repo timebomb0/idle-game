@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { combineReducers, configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import data from './game_data';
-import { Army, SoldierType, WorkerType } from './types';
+import { SOLDIER_MAP, STORED_STATE_KEY, WORKER_MAP } from './constants';
+import { SoldierMap, SoldierType, WorkerType } from './types';
 
 interface SoldierPayload {
 	amount: number;
@@ -25,8 +26,8 @@ interface UpdateRemainingArmy {
 }
 
 export interface WarringArmy {
-	soldierHealths: Army | Record<string, never>;
-	soldiers: Army | Record<string, never>;
+	soldierHealths: SoldierMap;
+	soldiers: SoldierMap;
 }
 
 export interface WarState {
@@ -34,13 +35,12 @@ export interface WarState {
 	you: WarringArmy;
 	enemy: WarringArmy;
 }
-export type WorkerState = Record<WorkerType, number>;
 export type MessageState = MessageItem[];
 
 export interface ArmyState {
 	war: WarState;
-	soldiers: Army;
-	enemyArmy: Army;
+	soldiers: SoldierMap;
+	enemyArmy: SoldierMap;
 }
 
 export interface KeyModifierState {
@@ -50,7 +50,7 @@ export interface KeyModifierState {
 
 interface AutobuyPower {
 	total: number;
-	inUse: Record<SoldierType, number>;
+	inUse: SoldierMap;
 }
 
 const armySlice = createSlice({
@@ -58,25 +58,19 @@ const armySlice = createSlice({
 	initialState: {
 		war: {
 			isActive: false,
-			you: { soldierHealths: {}, soldiers: {} },
-			enemy: { soldierHealths: {}, soldiers: {} },
+			you: { soldierHealths: { ...SOLDIER_MAP }, soldiers: { ...SOLDIER_MAP } },
+			enemy: { soldierHealths: { ...SOLDIER_MAP }, soldiers: { ...SOLDIER_MAP } },
 		},
-		soldiers: data.soldiers.reduce((result, soldier) => {
-			result[soldier.id] = 0;
-			return result;
-		}, {} as Army),
-		enemyArmy: data.soldiers.reduce((result, soldier) => {
-			result[soldier.id] = 0;
-			return result;
-		}, {} as Army),
+		soldiers: { ...SOLDIER_MAP },
+		enemyArmy: { ...SOLDIER_MAP },
 	} as ArmyState,
 	reducers: {
 		startWar: (state) => ({
 			...state,
 			war: {
 				isActive: true,
-				you: { soldierHealths: {}, soldiers: state.soldiers },
-				enemy: { soldierHealths: {}, soldiers: state.enemyArmy },
+				you: { soldierHealths: { ...SOLDIER_MAP }, soldiers: state.soldiers },
+				enemy: { soldierHealths: { ...SOLDIER_MAP }, soldiers: state.enemyArmy },
 			},
 		}),
 		stopWar: (state) => {
@@ -84,8 +78,8 @@ const armySlice = createSlice({
 				...state,
 				war: {
 					isActive: false,
-					you: { soldierHealths: {}, soldiers: {} },
-					enemy: { soldierHealths: {}, soldiers: {} },
+					you: { soldierHealths: { ...SOLDIER_MAP }, soldiers: { ...SOLDIER_MAP } },
+					enemy: { soldierHealths: { ...SOLDIER_MAP }, soldiers: { ...SOLDIER_MAP } },
 				},
 			};
 		},
@@ -117,7 +111,7 @@ const armySlice = createSlice({
 				},
 			};
 		},
-		setEnemyArmy: (state, action: PayloadAction<Army>) => ({
+		setEnemyArmy: (state, action: PayloadAction<SoldierMap>) => ({
 			...state,
 			enemyArmy: action.payload,
 		}),
@@ -145,7 +139,7 @@ const autobuyPowerSlice = createSlice({
 	name: 'autobuyPower',
 	initialState: {
 		total: 0,
-		inUse: {},
+		inUse: { ...SOLDIER_MAP },
 	} as AutobuyPower,
 	reducers: {
 		updateInUse: (state, action: PayloadAction<Partial<Record<SoldierType, number>>>) => ({
@@ -185,10 +179,7 @@ const keyModifierSlice = createSlice({
 
 const workersSlice = createSlice({
 	name: 'workers',
-	initialState: data.workers.reduce((result, soldier) => {
-		result[soldier.id] = 0;
-		return result;
-	}, {} as WorkerState),
+	initialState: { ...WORKER_MAP },
 	reducers: {
 		addWorker: (state, action: PayloadAction<WorkerPayload>) => {
 			return {
@@ -228,6 +219,35 @@ const messagesSlice = createSlice({
 	},
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
+	const result = next(action);
+	localStorage.setItem('_gameState', JSON.stringify(store.getState()));
+	return result;
+};
+
+const rehydrateStore = () => {
+	const storedState = localStorage.getItem('_gameState');
+	if (storedState) {
+		try {
+			return JSON.parse(storedState);
+		} catch (e) {
+			localStorage.removeItem('_gameState');
+		}
+	}
+};
+
+const resetSlice = createSlice({
+	name: 'reset',
+	initialState: null,
+	reducers: {
+		resetAll() {
+			// Note that this should be left intentionally empty.
+			// Clearing redux state and localStorage happens in rootReducer.
+		},
+	},
+});
+
 const reducer = combineReducers({
 	coins: coinsSlice.reducer,
 	workers: workersSlice.reducer,
@@ -237,10 +257,21 @@ const reducer = combineReducers({
 	army: armySlice.reducer,
 	autobuyPower: autobuyPowerSlice.reducer,
 	keyModifier: keyModifierSlice.reducer,
+	reset: resetSlice.reducer,
 });
+
+const rootReducer = (state: any, action: any) => {
+	if (action.type === 'reset/resetAll') {
+		localStorage.removeItem(STORED_STATE_KEY);
+		state = undefined;
+	}
+	return reducer(state, action);
+};
 export type AppState = ReturnType<typeof reducer>;
 export const appStore = configureStore({
-	reducer,
+	reducer: rootReducer,
+	preloadedState: rehydrateStore(),
+	middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(localStorageMiddleware),
 });
 export const actions = {
 	...coinsSlice.actions,
@@ -251,4 +282,5 @@ export const actions = {
 	...armySlice.actions,
 	...autobuyPowerSlice.actions,
 	...keyModifierSlice.actions,
+	...resetSlice.actions,
 };

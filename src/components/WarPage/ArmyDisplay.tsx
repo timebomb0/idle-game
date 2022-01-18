@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import cls from 'classnames';
 import data from '../../game_data';
-import { Army, SoldierType } from '../../types';
+import { SoldierMap, SoldierType } from '../../types';
 import AnimatedText from '../AnimatedText';
 import styles from './WarPage.module.scss';
 import { ProgressBar } from '../ProgressBar';
 
 interface Props {
-	army: Army;
+	army: SoldierMap;
 	armyMaxHealth?: number;
 	armyColor?: string;
 	isAnimated: boolean;

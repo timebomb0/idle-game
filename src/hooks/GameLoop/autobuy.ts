@@ -1,7 +1,7 @@
 import { Dispatch } from '@reduxjs/toolkit';
 import data from '../../game_data';
 import { actions } from '../../state';
-import { SoldierType } from '../../types';
+import { SoldierMap, SoldierType } from '../../types';
 import { randNum } from '../../util';
 
 export default function ({
@@ -9,7 +9,7 @@ export default function ({
 	coins,
 	dispatch,
 }: {
-	autobuyers: Record<SoldierType, number>;
+	autobuyers: SoldierMap;
 	coins: number;
 	dispatch: Dispatch;
 }): void {

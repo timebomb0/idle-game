@@ -1,15 +1,22 @@
 import { Dispatch } from '@reduxjs/toolkit';
+import { SOLDIER_MAP } from '../../constants';
 import data from '../../game_data';
 import { actions } from '../../state';
-import { Army, SoldierType } from '../../types';
+import { SoldierMap, SoldierType } from '../../types';
 import { getArmyValue, randNum } from '../../util';
 
 // TODO: Add more creative enemy army types/mutators and display them. e.g. weak(lower atk and def),
 //       higher atk lower def, higher def lower atk, vengeful (deals higher dmg as remaining offense/def gets lower), etc
-export default function ({ soldiers, dispatch }: { soldiers: Army; dispatch: Dispatch }): void {
+export default function ({
+	soldiers,
+	dispatch,
+}: {
+	soldiers: SoldierMap;
+	dispatch: Dispatch;
+}): void {
 	const yourArmyValue = getArmyValue(soldiers);
 	let enemyArmyValue = 0;
-	const enemyArmy: Army | Record<string, never> = {};
+	const enemyArmy: SoldierMap = { ...SOLDIER_MAP };
 	const targetEnemyArmyValue = randNum(0.75 * yourArmyValue, 1.2 * yourArmyValue);
 
 	while (enemyArmyValue < targetEnemyArmyValue) {

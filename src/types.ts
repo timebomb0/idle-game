@@ -20,4 +20,5 @@ export enum SoldierType {
 	Knight,
 }
 
-export type Army = { [K in SoldierType]?: number };
+export type SoldierMap = Record<SoldierType, number>;
+export type WorkerMap = Record<WorkerType, number>;

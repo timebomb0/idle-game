@@ -1,18 +1,19 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import data from '../../game_data';
 import { Page } from '../Layout';
-import { AppState, ArmyState, WarState } from '../../state';
+import { actions, AppState, ArmyState, WarState } from '../../state';
 import styles from './WarPage.module.scss';
 import ArmyDisplay from './ArmyDisplay';
-import { Army, SoldierType } from '../../types';
+import { SoldierMap, SoldierType } from '../../types';
 
 const ActiveWar: React.FC = (): JSX.Element => {
+	const dispatch = useDispatch();
 	const { soldiers: yourArmy, enemyArmy, war } = useSelector<AppState>(
 		(state) => state.army,
 	) as ArmyState;
 
-	const getSoldiersRemaining = (army: Army) =>
+	const getSoldiersRemaining = (army: SoldierMap) =>
 		Object.values(army).reduce((num, count) => {
 			return (num || 0) + (count || 0);
 		}, 0) || 0;
@@ -32,9 +33,18 @@ const ActiveWar: React.FC = (): JSX.Element => {
 		},
 		0,
 	);
+
+	const surrender = () => {
+		dispatch(actions.appendMessage({ message: 'Your army has surrendered.' }));
+		dispatch(actions.stopWar());
+	};
+
 	return (
 		<Page className={styles.ActiveWar}>
 			<div>
+				<button className={styles.surrenderBtn} onClick={surrender}>
+					Surrender
+				</button>
 				<div className={styles.playerStrength}>
 					<span style={{ color: '#0000E0' }}>Your army</span>
 					{yourSoldiersRemaining > 0 ? (

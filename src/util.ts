@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import data from './game_data';
-import { Army, SoldierType } from './types';
+import { SoldierMap, SoldierType } from './types';
 
 export const symbolsTexts = {
 	// borrowed from https://idlechampions.fandom.com/wiki/Large_number_abbreviations - Thanks!
@@ -36,7 +36,7 @@ export function randNum(min: number, max: number): number {
 	return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
 
-export function getArmyValue(soldiers: Army): number {
+export function getArmyValue(soldiers: SoldierMap): number {
 	return Object.keys(soldiers).reduce((value, soldier) => {
 		const soldierType = (soldier as unknown) as SoldierType;
 		value += data.soldiers[soldierType].purchasePrice * (soldiers[soldierType] as number);

@@ -1,12 +1,22 @@
 import { actions, WarState } from '../../state';
 import { Dispatch } from '@reduxjs/toolkit';
-import { Army, SoldierType } from '../../types';
+import { SoldierMap, SoldierType } from '../../types';
 import { WarringArmy } from '../../state';
 import data from '../../game_data';
 
 // TODO: Verify dmg algorithm, make sure it can scale so it can handle very high atk and defense
 // TODO: Reset enemy army after the war, create UI state so if no enemy army is set it displays something
-export default function ({ war, dispatch }: { war: WarState; dispatch: Dispatch }): void {
+export default function ({
+	war,
+	dispatch,
+	hasWarEnded,
+	setHasWarEnded,
+}: {
+	war: WarState;
+	dispatch: Dispatch;
+	hasWarEnded: boolean;
+	setHasWarEnded: (arg: boolean) => void;
+}): void {
 	const yourSoldiers = flattenSoldiers(war.you.soldiers);
 	const yourDamageReceived = getDamageReceived(war.you.soldiers);
 	const yourMaxDamageReceived = getMaxDamageReceived(war.you.soldiers);
@@ -49,7 +59,26 @@ export default function ({ war, dispatch }: { war: WarState; dispatch: Dispatch 
 		}),
 	);
 
-	if (enemyLivingSoldierTypes.length === 0) {
+	if (
+		hasWarEnded == false &&
+		(enemyLivingSoldierTypes.length === 0 || yourLivingSoldierTypes.length === 0)
+	) {
+		setHasWarEnded(true);
+		return;
+	}
+
+	if (
+		enemyLivingSoldierTypes.length === 0 &&
+		yourLivingSoldierTypes.length === 0 &&
+		hasWarEnded === true
+	) {
+		dispatch(
+			actions.appendMessage({
+				message: `No soldiers remain, the war has ended in a tie!`,
+			}),
+		);
+		dispatch(actions.stopWar());
+	} else if (enemyLivingSoldierTypes.length === 0 && hasWarEnded === true) {
 		dispatch(
 			actions.appendMessage({
 				message: `You have won the war and gained 100 reputation`,
@@ -58,7 +87,7 @@ export default function ({ war, dispatch }: { war: WarState; dispatch: Dispatch 
 		dispatch(actions.stopWar());
 		dispatch(actions.incrementReputation(100));
 		// TODO: add won war logic/rewards
-	} else if (yourLivingSoldierTypes.length === 0) {
+	} else if (yourLivingSoldierTypes.length === 0 && hasWarEnded === true) {
 		dispatch(actions.appendMessage({ message: 'You have lost the war' }));
 		dispatch(actions.stopWar());
 	}
@@ -72,8 +101,8 @@ function processSoldierAttack({
 }: {
 	attackerSoldierType: SoldierType;
 	defenderLivingSoldierTypes: SoldierType[];
-	defenderDamageReceived: Army;
-	defenderMaxDamageReceived: Army;
+	defenderDamageReceived: SoldierMap;
+	defenderMaxDamageReceived: SoldierMap;
 }) {
 	// your soldier damages a random enemy soldier
 	const randDefenderSoldierType =
@@ -100,7 +129,7 @@ function getUpdatedArmy({
 	damageReceived,
 }: {
 	army: WarringArmy;
-	damageReceived: Army;
+	damageReceived: SoldierMap;
 }): WarringArmy {
 	const updatedArmy = { ...army.soldiers };
 	const updatedHealths = { ...army.soldierHealths };
@@ -123,7 +152,7 @@ function getUpdatedArmy({
 	};
 }
 
-function flattenSoldiers(soldiers: Army): SoldierType[] {
+function flattenSoldiers(soldiers: SoldierMap): SoldierType[] {
 	return Object.entries(soldiers).reduce((soldiers, [soldierKey, soldierCount]) => {
 		return (soldierCount || 0) > 0
 			? soldiers.concat(
@@ -135,23 +164,23 @@ function flattenSoldiers(soldiers: Army): SoldierType[] {
 	}, [] as SoldierType[]);
 }
 
-function getDamageReceived(soldiers: Army): Army {
+function getDamageReceived(soldiers: SoldierMap): SoldierMap {
 	return Object.keys(soldiers).reduce((newObj, soldierKey) => {
 		newObj[(soldierKey as unknown) as SoldierType] = 0;
 		return newObj;
-	}, {} as Army);
+	}, {} as SoldierMap);
 }
 
-function getMaxDamageReceived(soldiers: Army): Army {
+function getMaxDamageReceived(soldiers: SoldierMap): SoldierMap {
 	return Object.keys(soldiers).reduce((newObj, soldierKey) => {
 		const soldierType = (soldierKey as unknown) as SoldierType;
 		const soldierQuantity: number = soldiers[soldierType] || 0;
 		newObj[soldierType] = data.soldiers[soldierType].health * soldierQuantity;
 		return newObj;
-	}, {} as Army);
+	}, {} as SoldierMap);
 }
 
-function getLivingSoldierTypes(soldiers: Army): SoldierType[] {
+function getLivingSoldierTypes(soldiers: SoldierMap): SoldierType[] {
 	return Object.keys(soldiers).reduce((soldierTypes, soldierKey) => {
 		const soldierType = (soldierKey as unknown) as SoldierType;
 		if ((soldiers[soldierType] || 0) > 0) {
@@ -162,7 +191,7 @@ function getLivingSoldierTypes(soldiers: Army): SoldierType[] {
 }
 
 /* No longer using this function, may use for future AI improvements
-function armyToSoldierPercentage(army: Army, totalSoldierCount: number): Army {
+function armyToSoldierPercentage(army: SoldierMap, totalSoldierCount: number): SoldierMap {
 	const result = { ...army };
 	Object.keys(result).forEach((soldierType) => {
 		const st = (soldierType as unknown) as SoldierType;

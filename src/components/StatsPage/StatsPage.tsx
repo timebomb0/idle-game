@@ -1,16 +1,23 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Page } from '../Layout';
-import { AppState } from '../../state';
+import { actions, AppState } from '../../state';
 import styles from './StatsPage.module.scss';
 import data from '../../game_data';
-import { Army, SoldierType } from '../../types';
+import { SoldierMap, SoldierType } from '../../types';
 import { getArmyValue } from '../../util';
+import { STORED_STATE_KEY } from '../../constants';
 
 const StatsPage: React.FC = (): JSX.Element => {
-	const soldiers = useSelector<AppState>((state) => state.army.soldiers) as Army;
+	const dispatch = useDispatch();
+	const soldiers = useSelector<AppState>((state) => state.army.soldiers) as SoldierMap;
 	const coins = useSelector<AppState>((state) => state.coins) as number;
+
+	const resetGame = () => {
+		localStorage.setItem(STORED_STATE_KEY, '');
+		dispatch(actions.resetAll());
+	};
 
 	return (
 		<Page className={styles.StatsPage}>
@@ -36,6 +43,18 @@ const StatsPage: React.FC = (): JSX.Element => {
 			<div>
 				<label>Army Value</label>{' '}
 				<span>{getArmyValue(soldiers).toLocaleString('en-us')}</span>
+			</div>
+			<div>
+				<button
+					onClick={resetGame}
+					style={{
+						backgroundColor: '#990000',
+						color: '#eee',
+						border: '6px solid #ff0000',
+					}}
+				>
+					Reset Everything
+				</button>
 			</div>
 		</Page>
 	);
