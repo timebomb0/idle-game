@@ -51,8 +51,13 @@
 		height: 42px;
 		animation-duration: 3.9s;
 		animation-fill-mode: both;
+		font-size: 16px;
 		&.animating {
 			animation-name: fadeout;
+		}
+		&.permaFadedOut {
+			animation-name: none;
+			opacity: 0.25;
 		}
 	}
 }
@@ -60,11 +65,9 @@
 @keyframes fadeout {
 	from {
 		opacity: 1;
-		font-size: 16px;
 	}
 	to {
-		font-size: 10px;
-		opacity: 0;
+		opacity: 0.25;
 		transform: none;
 	}
 }

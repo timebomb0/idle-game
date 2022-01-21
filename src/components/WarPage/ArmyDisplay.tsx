@@ -15,27 +15,20 @@ interface Props {
 // eslint-disable-next-line react/display-name
 const ArmyDisplay: React.FC<Props> = React.memo(
 	({ army, armyMaxHealth, armyColor, isAnimated }: Props): JSX.Element => {
+		const [initialArmy] = useState(army);
 		const [prevArmy, setPrevArmy] = useState(army);
-		const [killedSoldierTypes, setKilledSoldierTypes] = useState([] as SoldierType[]);
 
 		// If we're animated, track killed soldier types so we can render them in the DOM to fade them out
-		useEffect(() => {
-			if (!isAnimated) {
-				return;
-			}
-			const updatedKilledSoldierTypes = (Object.keys(army).filter((soldierKey) => {
-				const soldierType = (soldierKey as unknown) as SoldierType;
-				if (army[soldierType] === 0 && prevArmy[soldierType] !== 0) {
-					return soldierType;
-				}
+		let killedSoldierTypes: SoldierType[] = [];
+		if (isAnimated) {
+			killedSoldierTypes = (Object.keys(SoldierType).filter((soldierKey) => {
+				if (typeof soldierKey === 'number') return false;
+				return true;
 			}) as unknown[]) as SoldierType[];
 			if (army !== prevArmy) {
 				setPrevArmy(army);
 			}
-			if (updatedKilledSoldierTypes.length > 0) {
-				setKilledSoldierTypes([...killedSoldierTypes, ...updatedKilledSoldierTypes]);
-			}
-		}, [army, prevArmy, setPrevArmy, killedSoldierTypes, setKilledSoldierTypes]);
+		}
 
 		const armyRemainingHealth = Object.entries(army).reduce(
 			(totalHealth, [soldierKey, soldierCount]) => {
@@ -73,18 +66,24 @@ const ArmyDisplay: React.FC<Props> = React.memo(
 						.map((soldier) => {
 							const soldierType = (soldier as unknown) as SoldierType;
 							const isSoldierKilled = (army[soldierType] || 0) <= 0;
+							const isSoldierNotPurchased = initialArmy[soldierType] === 0;
 
 							return isAnimated ? (
 								<div
 									key={soldier}
 									className={cls(styles.soldierDisplay, {
 										[styles.animating]: isSoldierKilled,
+										[styles.permaFadedOut]: isSoldierNotPurchased,
 									})}
 								>
 									{`${data.soldiers[soldierType].texts.plural}: `}
 									{isAnimated ? (
 										<AnimatedText className={styles.SoldierText}>
-											{army[soldierType]}
+											{isSoldierNotPurchased
+												? '-'
+												: isSoldierKilled
+												? 'X'
+												: army[soldierType]}
 										</AnimatedText>
 									) : (
 										army[soldierType]

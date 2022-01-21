@@ -15,7 +15,7 @@ const AnimatedText: React.FC<Props> = ({ children, className }: Props): JSX.Elem
 			setPrevChildren(children);
 			setAnimating(true);
 		}
-	}, [children]);
+	}, [children, animating, setAnimating, prevChildren]);
 
 	const handleAnimationEnd = () => {
 		setAnimating(false);
