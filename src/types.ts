@@ -20,5 +20,10 @@ export enum SoldierType {
 	Knight,
 }
 
+export enum ActivityType {
+	Scavenge,
+	Idle,
+}
+
 export type SoldierMap = Record<SoldierType, number>;
 export type WorkerMap = Record<WorkerType, number>;

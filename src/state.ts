@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { combineReducers, configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SOLDIER_MAP, STORED_STATE_KEY, WORKER_MAP } from './constants';
-import { SoldierMap, SoldierType, WorkerType } from './types';
+import { ActivityType, SoldierMap, SoldierType, WorkerType } from './types';
 
 interface SoldierPayload {
 	amount: number;
@@ -36,6 +36,10 @@ export interface WarState {
 	enemy: WarringArmy;
 }
 export type MessageState = MessageItem[];
+
+interface ActivityState {
+	currentActivity: ActivityType;
+}
 
 export interface ArmyState {
 	war: WarState;
@@ -115,6 +119,22 @@ const armySlice = createSlice({
 			...state,
 			enemyArmy: action.payload,
 		}),
+	},
+});
+
+const generalSlice = createSlice({
+	name: 'general',
+	initialState: { stats: {}, equipped: {}, inventory: {}, talents: {} },
+	reducers: {},
+});
+
+const activitySlice = createSlice({
+	name: 'activity',
+	initialState: { currentActivity: ActivityType.Idle } as ActivityState,
+	reducers: {
+		setCurrentActivity: (state, action: PayloadAction<ActivityType>) => {
+			return { ...state, currentActivity: action.payload };
+		},
 	},
 });
 
@@ -258,6 +278,8 @@ const reducer = combineReducers({
 	autobuyPower: autobuyPowerSlice.reducer,
 	keyModifier: keyModifierSlice.reducer,
 	reset: resetSlice.reducer,
+	activity: activitySlice.reducer,
+	general: generalSlice.reducer,
 });
 
 const rootReducer = (state: any, action: any) => {
@@ -283,4 +305,6 @@ export const actions = {
 	...autobuyPowerSlice.actions,
 	...keyModifierSlice.actions,
 	...resetSlice.actions,
+	...activitySlice.actions,
+	...generalSlice.actions,
 };

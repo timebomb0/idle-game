@@ -37,7 +37,7 @@ const App: React.FC = (): JSX.Element => {
 								<Link to="/training">Training</Link>
 							</li>
 							<li>
-								<Link to="/army">Army</Link>
+								<Link to="/army">Barracks</Link>
 							</li>
 							<li>
 								<Link to="/missions">Missions</Link>

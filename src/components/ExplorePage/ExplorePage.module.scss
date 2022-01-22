@@ -5,6 +5,14 @@
 	justify-content: center;
 	align-items: center;
 
+	span {
+		display: block;
+		text-align: center;
+		padding: 6px;
+		font-size: 20px;
+		color: #222;
+	}
+
 	> div {
 		padding: 40px;
 		background-color: #ccc;

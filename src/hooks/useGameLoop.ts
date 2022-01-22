@@ -4,7 +4,13 @@ import { LOOP_MS } from '../constants';
 import { actions, AppState } from '../state';
 import useInterval from './useInterval';
 import data from '../game_data';
-import { processAutobuy, processCoins, processEnemyArmy, processWar } from './GameLoop';
+import {
+	processActivity,
+	processAutobuy,
+	processCoins,
+	processEnemyArmy,
+	processWar,
+} from './GameLoop';
 
 export default (): void => {
 	const dispatch = useDispatch();
@@ -17,6 +23,7 @@ export default (): void => {
 	const war = useSelector((state: AppState) => state.army.war);
 	const autobuyers = useSelector((state: AppState) => state.autobuyPower.inUse);
 	const coins = useSelector((state: AppState) => state.coins);
+	const currentActivity = useSelector((state: AppState) => state.activity.currentActivity);
 
 	useInterval(() => {
 		setLoopInterval(loopInterval + 1);
@@ -33,6 +40,7 @@ export default (): void => {
 	const doTick = function () {
 		processCoins({ workers, dispatch });
 		processAutobuy({ autobuyers, coins, dispatch });
+		processActivity({ currentActivity, dispatch });
 
 		if (!war.isActive) {
 			if (enemyArmyTick >= data.war.enemyArmyUpdateInterval) {

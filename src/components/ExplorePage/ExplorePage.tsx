@@ -1,18 +1,22 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Page } from '../Layout';
-import { actions } from '../../state';
+import { actions, AppState } from '../../state';
 import { randNum } from '../../util';
 import styles from './ExplorePage.module.scss';
+import { ActivityType } from '../../types';
 
 const ExplorePage: React.FC = (): JSX.Element => {
+	const currentActivity = useSelector((state: AppState) => state.activity.currentActivity);
 	const dispatch = useDispatch();
 
-	const getCoin = () => {
-		const gain = randNum(100, 500);
-		dispatch(actions.incrementCoins(gain));
-		dispatch(actions.appendMessage({ message: `You scavenged ${gain} coins` }));
+	const startScavenging = () => {
+		dispatch(actions.setCurrentActivity(ActivityType.Scavenge));
+	};
+
+	const stopScavenging = () => {
+		dispatch(actions.setCurrentActivity(ActivityType.Idle));
 	};
 
 	return (
@@ -20,7 +24,15 @@ const ExplorePage: React.FC = (): JSX.Element => {
 			<div>
 				<div>
 					<div>
-						<button onClick={getCoin}>Scavenge</button>
+						{currentActivity === ActivityType.Scavenge ? (
+							<>
+								{' '}
+								<span>SCAVENGING...</span>
+								<button onClick={stopScavenging}>Stop Scavenging</button>
+							</>
+						) : (
+							<button onClick={startScavenging}>Start Scavenging</button>
+						)}
 					</div>
 				</div>
 			</div>
