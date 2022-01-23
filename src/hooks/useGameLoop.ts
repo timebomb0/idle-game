@@ -5,7 +5,7 @@ import { actions, AppState } from '../state';
 import useInterval from './useInterval';
 import data from '../game_data';
 import {
-	processActivity,
+	processExplore,
 	processAutobuy,
 	processCoins,
 	processEnemyArmy,
@@ -15,8 +15,9 @@ import {
 export default (): void => {
 	const dispatch = useDispatch();
 	const [loopInterval, setLoopInterval] = useState(0);
-	const [enemyArmyTick, setEnemyArmyTick] = useState(0);
-	const [warTick, setWarTick] = useState(0);
+	const [enemyArmyTick, setEnemyArmyTick] = useState(1);
+	const [exploreTick, setExploreTick] = useState(1);
+	const [warTick, setWarTick] = useState(1);
 	const [hasWarEnded, setHasWarEnded] = useState(false);
 	const soldiers = useSelector((state: AppState) => state.army.soldiers);
 	const workers = useSelector((state: AppState) => state.workers);
@@ -40,12 +41,18 @@ export default (): void => {
 	const doTick = function () {
 		processCoins({ workers, dispatch });
 		processAutobuy({ autobuyers, coins, dispatch });
-		processActivity({ currentActivity, dispatch });
+
+		if (exploreTick >= data.explore.scavengeUpdateInterval) {
+			processExplore({ currentActivity, dispatch });
+			setExploreTick(1);
+		} else {
+			setExploreTick(exploreTick + 1);
+		}
 
 		if (!war.isActive) {
 			if (enemyArmyTick >= data.war.enemyArmyUpdateInterval) {
 				processEnemyArmy({ soldiers, dispatch });
-				setEnemyArmyTick(0);
+				setEnemyArmyTick(1);
 			} else {
 				setEnemyArmyTick(enemyArmyTick + 1);
 			}
@@ -53,7 +60,7 @@ export default (): void => {
 
 		if (war.isActive && warTick >= data.war.warUpdateInterval) {
 			processWar({ war, dispatch, hasWarEnded, setHasWarEnded });
-			setWarTick(0);
+			setWarTick(1);
 		} else {
 			setWarTick(warTick + 1);
 		}

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import data from './game_data';
-import { SoldierMap, SoldierType } from './types';
+import { ActivityType, SoldierMap, SoldierType } from './types';
 
 export const symbolsTexts = {
 	// borrowed from https://idlechampions.fandom.com/wiki/Large_number_abbreviations - Thanks!
@@ -48,4 +48,13 @@ export function flattenObj<T>(obj: Record<any, T[]>): T[] {
 	return Object.keys(obj).reduce(function (r: any[], k) {
 		return Array.prototype.concat.call(r, obj[k]);
 	}, []);
+}
+
+export function getActivityText(activityType: ActivityType): string {
+	switch (activityType) {
+		case ActivityType.Scavenge:
+			return 'Scavenging';
+		case ActivityType.Idle:
+			return 'Nothing';
+	}
 }

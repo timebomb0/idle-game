@@ -5,6 +5,7 @@ import { StatDisplay } from '../StatDisplay';
 import { ProgressBar } from '../ProgressBar';
 import { AppState } from '../../state';
 import { useSelector } from 'react-redux';
+import { getActivityText } from '../../util';
 
 interface Props {
 	className: string;
@@ -12,12 +13,12 @@ interface Props {
 
 const MainStats: React.FC<Props> = ({ className }: Props): JSX.Element => {
 	const tick = useSelector((state: AppState) => state.tick);
+	const activity = useSelector((state: AppState) => state.activity.currentActivity);
 	return (
 		<div className={cls(className, styles.MainStats)}>
 			<ProgressBar progress={tick} />
+			<div className={styles.activity}>Current Activity: {getActivityText(activity)}</div>
 			<StatDisplay className={styles.Stat} stat="coins" abbreviateNum={true} />
-			<StatDisplay className={styles.Stat} stat="armyOffense" abbreviateNum={true} />
-			<StatDisplay className={styles.Stat} stat="armyDefense" abbreviateNum={true} />
 			<StatDisplay className={styles.Stat} stat="reputation" abbreviateNum={true} />
 		</div>
 	);
