@@ -11,9 +11,6 @@ interface WorkerPayload {
 	amount: number;
 	type: WorkerType;
 }
-interface MessagePayload {
-	message?: string;
-}
 
 interface MessageItem {
 	id: number;
@@ -122,8 +119,8 @@ const armySlice = createSlice({
 	},
 });
 
-const generalSlice = createSlice({
-	name: 'general',
+const playerSlice = createSlice({
+	name: 'player',
 	initialState: { stats: {}, equipped: {}, inventory: {}, talents: {} },
 	reducers: {},
 });
@@ -220,7 +217,7 @@ const messagesSlice = createSlice({
 	name: 'messages',
 	initialState: [] as MessageState,
 	reducers: {
-		appendMessage: (state, action: PayloadAction<MessagePayload>) => {
+		appendMessage: (state, action: PayloadAction<string>) => {
 			const prevId = state[state.length - 1]?.id || 1;
 			let id = 1;
 			if (prevId < Number.MAX_SAFE_INTEGER) {
@@ -228,7 +225,7 @@ const messagesSlice = createSlice({
 			}
 			const newMessage = {
 				id,
-				message: action.payload.message || '',
+				message: action.payload || '',
 			};
 			const newState = [...state, newMessage];
 			return newState;
@@ -262,9 +259,26 @@ const resetSlice = createSlice({
 	initialState: null,
 	reducers: {
 		resetAll() {
-			// Note that this should be left intentionally empty.
+			// This is intentionally empty.
 			// Clearing redux state and localStorage happens in rootReducer.
 		},
+	},
+});
+
+const spoilsSlice = createSlice({
+	name: 'spoils',
+	initialState: { scavenge: 0, war: 0 },
+	reducers: {
+		addScavengeSpoils: (state, action: PayloadAction<number>) => ({
+			...state,
+			scavenge: state.scavenge + action.payload,
+		}),
+		addWarSpoils: (state, action: PayloadAction<number>) => ({
+			...state,
+			war: state.war + action.payload,
+		}),
+		clearScavengeSpoils: (state) => ({ ...state, scavenge: 0 }),
+		clearWarSpoils: (state) => ({ ...state, war: 0 }),
 	},
 });
 
@@ -279,7 +293,8 @@ const reducer = combineReducers({
 	keyModifier: keyModifierSlice.reducer,
 	reset: resetSlice.reducer,
 	activity: activitySlice.reducer,
-	general: generalSlice.reducer,
+	player: playerSlice.reducer,
+	spoils: spoilsSlice.reducer,
 });
 
 const rootReducer = (state: any, action: any) => {
@@ -306,5 +321,6 @@ export const actions = {
 	...keyModifierSlice.actions,
 	...resetSlice.actions,
 	...activitySlice.actions,
-	...generalSlice.actions,
+	...playerSlice.actions,
+	...spoilsSlice.actions,
 };

@@ -35,13 +35,13 @@ const ArmyPage: React.FC = (): JSX.Element => {
 			dispatch(actions.decrementCoins(soldier.purchasePrice * purchaseModifier));
 			dispatch(actions.addSoldier({ amount: purchaseModifier, type: soldier.id }));
 			dispatch(
-				actions.appendMessage({
-					message: `You have recruited ${purchaseModifier} ${
+				actions.appendMessage(
+					`You have recruited ${purchaseModifier} ${
 						purchaseModifier === 1
 							? soldierConfig?.texts.singular
 							: soldierConfig?.texts.plural
 					}`,
-				}),
+				),
 			);
 		};
 	};

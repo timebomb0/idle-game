@@ -35,7 +35,7 @@ const ActiveWar: React.FC = (): JSX.Element => {
 	);
 
 	const surrender = () => {
-		dispatch(actions.appendMessage({ message: 'Your army has surrendered.' }));
+		dispatch(actions.appendMessage('Your army has surrendered.'));
 		dispatch(actions.stopWar());
 	};
 

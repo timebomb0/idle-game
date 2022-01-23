@@ -72,23 +72,15 @@ export default function ({
 		yourLivingSoldierTypes.length === 0 &&
 		hasWarEnded === true
 	) {
-		dispatch(
-			actions.appendMessage({
-				message: `No soldiers remain, the war has ended in a tie!`,
-			}),
-		);
+		dispatch(actions.appendMessage(`No soldiers remain, the war has ended in a tie!`));
 		dispatch(actions.stopWar());
 	} else if (enemyLivingSoldierTypes.length === 0 && hasWarEnded === true) {
-		dispatch(
-			actions.appendMessage({
-				message: `You have won the war and gained 100 reputation`,
-			}),
-		);
+		dispatch(actions.appendMessage(`You have won the war and gained 100 reputation`));
 		dispatch(actions.stopWar());
 		dispatch(actions.incrementReputation(100));
 		// TODO: add won war logic/rewards
 	} else if (yourLivingSoldierTypes.length === 0 && hasWarEnded === true) {
-		dispatch(actions.appendMessage({ message: 'You have lost the war' }));
+		dispatch(actions.appendMessage('You have lost the war'));
 		dispatch(actions.stopWar());
 	}
 }

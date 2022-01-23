@@ -29,13 +29,13 @@ const WorkersPage: React.FC = (): JSX.Element => {
 			}
 			dispatch(actions.addWorker({ amount: purchaseModifier, type: worker.id }));
 			dispatch(
-				actions.appendMessage({
-					message: `You have hired ${purchaseModifier} ${
+				actions.appendMessage(
+					`You have hired ${purchaseModifier} ${
 						purchaseModifier === 1
 							? data.workers[worker.id].texts.singular
 							: data.workers[worker.id].texts.plural
 					}`,
-				}),
+				),
 			);
 		};
 	};

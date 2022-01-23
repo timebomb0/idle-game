@@ -12,6 +12,6 @@ export default function ({
 }): void {
 	if (currentActivity === ActivityType.Scavenge) {
 		const gain = randNum(100, 500);
-		dispatch(actions.incrementCoins(gain));
+		dispatch(actions.addScavengeSpoils(gain));
 	}
 }
