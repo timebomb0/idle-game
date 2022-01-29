@@ -1,4 +1,5 @@
 .LogsPage {
+	height: 100%;
 	background-color: #336;
 	overflow-y: scroll;
 	padding: 5px;
@@ -13,7 +14,7 @@
 		if height isnt consistent and font size changes,
 		this will cause message list autoscrolling to break randomly
 		due to message height changing as message spawns in */
-	height: 16px;
+	line-height: 16px;
 
 	.timestamp {
 		color: #aaa;

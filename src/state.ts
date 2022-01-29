@@ -219,8 +219,8 @@ const messagesSlice = createSlice({
 	initialState: [] as MessageState,
 	reducers: {
 		appendMessage: (state, action: PayloadAction<string>) => {
-			const prevId = state[state.length - 1]?.id || 1;
-			let id = 1;
+			const prevId = state[0]?.id || 1;
+			let id = 0;
 			if (prevId < Number.MAX_SAFE_INTEGER) {
 				id = prevId + 1;
 			}
