@@ -15,10 +15,9 @@ const ArmyPage: React.FC = (): JSX.Element => {
 	const autobuyPower = useSelector((state: AppState) => state.autobuyPower);
 	const { ctrlKey, shiftKey } = useSelector((state: AppState) => state.keyModifier);
 
-	const remainingAutobuyPower = Object.values(autobuyPower.inUse).reduce(
-		(total, val) => (total += val),
-		0,
-	);
+	const remainingAutobuyPower =
+		autobuyPower.total -
+		Object.values(autobuyPower.inUse).reduce((total, val) => (total += val), 0);
 	let purchaseModifier = 1;
 	if (ctrlKey) {
 		purchaseModifier = 10;
@@ -47,7 +46,7 @@ const ArmyPage: React.FC = (): JSX.Element => {
 	};
 
 	const incrementAutobuy = (soldierType: SoldierType) => {
-		if (autobuyPower.total - remainingAutobuyPower >= purchaseModifier) {
+		if (remainingAutobuyPower >= purchaseModifier) {
 			dispatch(
 				actions.updateInUse({
 					[soldierType]: (autobuyPower.inUse[soldierType] || 0) + purchaseModifier,
