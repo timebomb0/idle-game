@@ -1,4 +1,4 @@
-.MessageList {
+.LogsPage {
 	background-color: #336;
 	overflow-y: scroll;
 	padding: 5px;
@@ -8,22 +8,14 @@
 	color: #eee;
 	margin: 3px 0;
 	font-size: 14px;
-	animation: fadein 1.3s;
 
 	/*  must keep height set consistently.
 		if height isnt consistent and font size changes,
 		this will cause message list autoscrolling to break randomly
 		due to message height changing as message spawns in */
 	height: 16px;
-}
 
-@keyframes fadein {
-	from {
-		opacity: 0.3;
-		font-size: 12px;
-	}
-	to {
-		opacity: 1;
-		font-size: 14px;
+	.timestamp {
+		color: #aaa;
 	}
 }

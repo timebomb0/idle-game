@@ -1,4 +1,4 @@
-import React, { Children, MouseEventHandler } from 'react';
+import React, { MouseEventHandler } from 'react';
 import cls from 'classnames';
 import styles from './ProgressButton.module.scss';
 

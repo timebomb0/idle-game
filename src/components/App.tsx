@@ -4,7 +4,7 @@ import { ArmyPage } from './ArmyPage';
 import useGameLoop from '../hooks/useGameLoop';
 import { Page } from './Layout';
 import { WorkersPage } from './WorkersPage';
-import { MessageList } from './MessageList';
+import { LogsPage } from './LogsPage';
 import styles from './App.module.scss';
 import { ExplorePage } from './ExplorePage';
 import { MainStats } from './MainStats';
@@ -52,7 +52,7 @@ const App: React.FC = (): JSX.Element => {
 								<Link to="/stats">Stats</Link>
 							</li>
 							<li>
-								<a className={styles.disabled}>???</a>
+								<Link to="/logs">Logs</Link>
 							</li>
 							<li>
 								<a className={styles.disabled}>???</a>
@@ -97,11 +97,13 @@ const App: React.FC = (): JSX.Element => {
 								</Route>
 								<Route exact path="/stats">
 									<StatsPage />
+								</Route>{' '}
+								<Route exact path="/logs">
+									<LogsPage />
 								</Route>
 							</Switch>
 						</div>
 					</div>
-					<MessageList className={styles.MessageList} />
 				</div>
 			</div>
 		</Router>

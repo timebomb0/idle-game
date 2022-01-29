@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import cls from 'classnames';
 import data from '../../game_data';
 import { SoldierMap, SoldierType } from '../../types';
@@ -10,24 +10,22 @@ interface Props {
 	army: SoldierMap;
 	armyMaxHealth?: number;
 	armyColor?: string;
-	isAnimated: boolean;
+	isHealthVisible: boolean;
 }
 // eslint-disable-next-line react/display-name
 const ArmyDisplay: React.FC<Props> = React.memo(
-	({ army, armyMaxHealth, armyColor, isAnimated }: Props): JSX.Element => {
+	({ army, armyMaxHealth, armyColor, isHealthVisible }: Props): JSX.Element => {
 		const [initialArmy] = useState(army);
 		const [prevArmy, setPrevArmy] = useState(army);
 
 		// If we're animated, track killed soldier types so we can render them in the DOM to fade them out
 		let killedSoldierTypes: SoldierType[] = [];
-		if (isAnimated) {
-			killedSoldierTypes = (Object.keys(SoldierType).filter((soldierKey) => {
-				if (typeof soldierKey === 'number') return false;
-				return true;
-			}) as unknown[]) as SoldierType[];
-			if (army !== prevArmy) {
-				setPrevArmy(army);
-			}
+		killedSoldierTypes = (Object.keys(SoldierType).filter((soldierKey) => {
+			if (typeof soldierKey === 'number') return false;
+			return true;
+		}) as unknown[]) as SoldierType[];
+		if (army !== prevArmy) {
+			setPrevArmy(army);
 		}
 
 		const armyRemainingHealth = Object.entries(army).reduce(
@@ -40,11 +38,11 @@ const ArmyDisplay: React.FC<Props> = React.memo(
 
 		return (
 			<div className={styles.ArmyDisplay}>
-				{armyMaxHealth ? (
+				{isHealthVisible ? (
 					<>
 						{' '}
 						<ProgressBar
-							isAnimated={isAnimated}
+							isAnimated={true}
 							color={armyColor}
 							progress={Math.min(
 								100,
@@ -68,7 +66,7 @@ const ArmyDisplay: React.FC<Props> = React.memo(
 							const isSoldierKilled = (army[soldierType] || 0) <= 0;
 							const isSoldierNotPurchased = initialArmy[soldierType] === 0;
 
-							return isAnimated ? (
+							return (
 								<div
 									key={soldier}
 									className={cls(styles.soldierDisplay, {
@@ -77,21 +75,14 @@ const ArmyDisplay: React.FC<Props> = React.memo(
 									})}
 								>
 									{`${data.soldiers[soldierType].texts.plural}: `}
-									{isAnimated ? (
-										<AnimatedText className={styles.SoldierText}>
-											{isSoldierNotPurchased
-												? '-'
-												: isSoldierKilled
-												? 'X'
-												: army[soldierType]}
-										</AnimatedText>
-									) : (
-										army[soldierType]
-									)}
-								</div>
-							) : (
-								<div key={soldier}>
-									{`${data.soldiers[soldierType].texts.plural}: ${army[soldierType]}`}
+
+									<AnimatedText className={styles.soldierText}>
+										{isSoldierNotPurchased
+											? '-'
+											: isSoldierKilled
+											? 'X'
+											: army[soldierType]}
+									</AnimatedText>
 								</div>
 							);
 						})}

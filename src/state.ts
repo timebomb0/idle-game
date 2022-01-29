@@ -15,6 +15,7 @@ interface WorkerPayload {
 interface MessageItem {
 	id: number;
 	message: string;
+	timestamp: number;
 }
 
 interface UpdateRemainingArmy {
@@ -226,8 +227,9 @@ const messagesSlice = createSlice({
 			const newMessage = {
 				id,
 				message: action.payload || '',
+				timestamp: Date.now(),
 			};
-			const newState = [...state, newMessage];
+			const newState = [newMessage, ...state];
 			return newState;
 		},
 		clearMessages: () => {

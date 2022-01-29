@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import data from '../../game_data';
 import { Page } from '../Layout';
 import { actions, AppState } from '../../state';
 import styles from './ExplorePage.module.scss';

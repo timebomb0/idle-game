@@ -4,17 +4,11 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
-	> div {
-		width: 300px;
-		background-color: #d0d0d0;
-		padding: 20px;
-		border: 6px solid #c8c8c8;
-	}
+	flex-direction: column;
 }
 
-.playerStrength,
-.enemyStrength {
+.playerArmy,
+.enemyArmy {
 	margin-bottom: 6px;
 	text-align: center;
 	padding: 6px 15px;
@@ -28,15 +22,35 @@
 	}
 }
 
-.playerStrength {
-	color: blue;
-}
+.armyContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	width: 300px;
+	padding: 20px;
+	border: 6px solid #c8c8c8;
 
-.enemyStrength {
-	color: red;
+	.army {
+		margin: 0 6px;
+		padding: 10px;
+		border-radius: 8px;
+
+		&.playerArmy {
+			background-color: rgba(0, 0, 150, 0.25);
+			border: 3px solid rgb(0, 0, 150);
+			margin-bottom: 10px;
+		}
+
+		&.enemyArmy {
+			background-color: rgba(150, 0, 0, 0.25);
+			border: 3px solid rgb(150, 0, 0);
+		}
+	}
 }
 
 .fightBtn {
+	display: block;
 	background-color: orangered;
 	color: #222;
 	font-weight: 600;
@@ -47,17 +61,27 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 	}
+
 	.soldierDisplay {
-		height: 42px;
 		animation-duration: 3.9s;
 		animation-fill-mode: both;
 		font-size: 16px;
+		border-radius: 25px;
+		padding: 8px ​10px;
+		margin: 5px;
+		text-align: center;
+
 		&.animating {
 			animation-name: fadeout;
 		}
 		&.permaFadedOut {
 			animation-name: none;
-			opacity: 0.25;
+			opacity: 0.2;
+		}
+
+		.soldierText {
+			display: block;
+			font-size: 14px;
 		}
 	}
 }
@@ -67,7 +91,7 @@
 		opacity: 1;
 	}
 	to {
-		opacity: 0.25;
+		opacity: 0.4;
 		transform: none;
 	}
 }

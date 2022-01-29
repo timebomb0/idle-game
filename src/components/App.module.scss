@@ -6,7 +6,7 @@
 	margin: auto;
 
 	.App {
-		height: 600px;
+		height: 650px;
 		padding: 0;
 		border: 5px solid #558;
 		width: 100%;
@@ -15,17 +15,11 @@
 
 .GameContent {
 	display: flex;
-	height: 485px;
+	height: 100%;
 }
 
 .MainStats {
 	width: 170px;
-}
-
-.MessageList {
-	border-top: 3px solid #558;
-	width: 100%;
-	height: 105px;
 }
 
 .Menu {
