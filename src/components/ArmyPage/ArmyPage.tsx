@@ -72,7 +72,6 @@ const ArmyPage: React.FC = (): JSX.Element => {
 		}
 	};
 
-	// TODO Create component displaying current amount, name of item, and purchase price
 	return (
 		<Page className={styles.ArmyPage}>
 			{data.soldiers.map((soldier) => {

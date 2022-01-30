@@ -28,6 +28,10 @@ export interface WarringArmy {
 	soldiers: SoldierMap;
 }
 
+export interface TickState {
+	progress: number;
+	tickCount: number;
+}
 export interface WarState {
 	isActive: boolean;
 	you: WarringArmy;
@@ -138,9 +142,16 @@ const activitySlice = createSlice({
 
 const tickSlice = createSlice({
 	name: 'gameTick',
-	initialState: 0,
+	initialState: { progress: 0, tickCount: 0 } as TickState,
 	reducers: {
-		setTick: (state, action: PayloadAction<number>) => action.payload,
+		setTick: (state, action: PayloadAction<number>) => ({
+			progress: action.payload,
+			tickCount: state.tickCount,
+		}),
+		incrementTickCount: (state) => ({
+			progress: state.progress,
+			tickCount: state.tickCount === Number.MAX_VALUE ? 0 : state.tickCount + 1,
+		}),
 	},
 });
 

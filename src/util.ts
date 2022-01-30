@@ -56,5 +56,19 @@ export function getActivityText(activityType: ActivityType): string {
 			return 'Scavenging';
 		case ActivityType.Idle:
 			return 'Nothing';
+		case ActivityType.War:
+			return 'At War';
 	}
+}
+
+export function tickToProgress({
+	currentTick,
+	tickMultiplier,
+	ticksElapsed,
+}: {
+	currentTick: number;
+	tickMultiplier: number;
+	ticksElapsed: number;
+}): number {
+	return ((currentTick + (ticksElapsed % tickMultiplier) * 100) / (tickMultiplier * 100)) * 100;
 }

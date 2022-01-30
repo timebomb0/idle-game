@@ -5,14 +5,17 @@ import data from '../../game_data';
 import { Page } from '../Layout';
 import { actions, AppState, ArmyState } from '../../state';
 import ArmyDisplay from './ArmyDisplay';
-import { SoldierMap, SoldierType } from '../../types';
+import { ActivityType, SoldierMap, SoldierType } from '../../types';
 import styles from './WarPage.module.scss';
+import { ProgressButton } from '../ProgressButton';
+import { tickToProgress } from '../../util';
 
 const WarPage: React.FC = (): JSX.Element => {
 	const dispatch = useDispatch();
-	const { soldiers: yourArmy, enemyArmy, war } = useSelector<AppState>(
-		(state) => state.army,
+	const { soldiers: yourArmy, enemyArmy, war } = useSelector(
+		(state: AppState) => state.army,
 	) as ArmyState;
+	const { progress: tickProgress, tickCount } = useSelector((state: AppState) => state.tick);
 
 	const getSoldiersRemaining = (army: SoldierMap) =>
 		Object.values(army).reduce((num, count) => {
@@ -28,12 +31,20 @@ const WarPage: React.FC = (): JSX.Element => {
 	const yourArmyMaxHealth = getArmyMaxHealth(yourArmy);
 	const enemyArmyMaxHealth = getArmyMaxHealth(enemyArmy);
 
+	const warTickProgress = tickToProgress({
+		currentTick: tickProgress,
+		ticksElapsed: tickCount,
+		tickMultiplier: data.war.warUpdateInterval,
+	});
+
 	const surrender = () => {
 		dispatch(actions.appendMessage('Your army has surrendered.'));
 		dispatch(actions.stopWar());
+		dispatch(actions.setCurrentActivity(ActivityType.Idle));
 	};
 	const fight = () => {
 		dispatch(actions.startWar());
+		dispatch(actions.setCurrentActivity(ActivityType.War));
 	};
 
 	const yourSoldiers = war.isActive ? war.you.soldiers : yourArmy;
@@ -79,13 +90,17 @@ const WarPage: React.FC = (): JSX.Element => {
 				</div>
 
 				{war.isActive ? (
-					<button className={styles.surrenderBtn} onClick={surrender}>
+					<ProgressButton
+						progress={warTickProgress}
+						className={styles.surrenderBtn}
+						onClick={surrender}
+					>
 						Surrender
-					</button>
+					</ProgressButton>
 				) : null}
 				{war.isActive ? null : (
 					<button className={styles.fightBtn} onClick={fight}>
-						Attack
+						Go To War
 					</button>
 				)}
 			</div>

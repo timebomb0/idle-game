@@ -2,21 +2,27 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Page } from '../Layout';
 import { actions, AppState } from '../../state';
-import styles from './ExplorePage.module.scss';
 import { ActivityType } from '../../types';
 import { abbreviateNumber } from 'js-abbreviation-number';
 import { ProgressButton } from '../ProgressButton';
+import { tickToProgress } from '../../util';
+import data from '../../game_data';
+import styles from './ExplorePage.module.scss';
 
 const ExplorePage: React.FC = (): JSX.Element => {
 	const currentActivity = useSelector((state: AppState) => state.activity.currentActivity);
 	const scavengeSpoils = useSelector((state: AppState) => state.spoils.scavenge);
-	const tick = useSelector((state: AppState) => state.tick);
+	const { progress: tickProgress, tickCount } = useSelector((state: AppState) => state.tick);
 	const dispatch = useDispatch();
 
 	// TODO: Update this to support if scavenge is more than one tick.
 	//       May wanna make util function to do this for any interval
 	//       May need to track in global state how many ticks has gone on for each interval prior to that consumer being triggered
-	const scavengeProgress = tick;
+	const scavengeProgress = tickToProgress({
+		ticksElapsed: tickCount,
+		currentTick: tickProgress,
+		tickMultiplier: data.explore.scavengeUpdateInterval,
+	});
 
 	const startScavenging = () => {
 		dispatch(actions.setCurrentActivity(ActivityType.Scavenge));

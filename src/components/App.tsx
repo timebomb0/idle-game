@@ -43,7 +43,7 @@ const App: React.FC = (): JSX.Element => {
 								<Link to="/missions">Missions</Link>
 							</li>
 							<li>
-								<Link to="/war">War</Link>
+								<Link to="/skirmish">Skirmish</Link>
 							</li>
 							<li>
 								<Link to="/duels">Duels</Link>
@@ -87,7 +87,7 @@ const App: React.FC = (): JSX.Element => {
 										<></>
 									</Page>
 								</Route>
-								<Route exact path="/war">
+								<Route exact path="/skirmish">
 									<WarPage />
 								</Route>
 								<Route exact path="/duels">

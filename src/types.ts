@@ -23,6 +23,7 @@ export enum SoldierType {
 export enum ActivityType {
 	Scavenge,
 	Idle,
+	War,
 }
 
 export type SoldierMap = Record<SoldierType, number>;
